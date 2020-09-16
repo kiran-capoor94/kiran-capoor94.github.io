@@ -1,0 +1,5 @@
+@import "./variables";
+
+.base_shadow {
+	box-shadow: 8px 8px 0px $primary, -8px 0px 0px $primary-light, 0px -8px 0px $secondary;
+}
