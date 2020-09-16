@@ -2,7 +2,9 @@
   <Layout :show-logo="false">
     <!-- List posts -->
     <section class="section">
-      <Author />
+      <div class="container">
+        <Author />
+      </div>
     </section>
   </Layout>
 </template>

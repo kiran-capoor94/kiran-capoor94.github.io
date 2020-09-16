@@ -1,7 +1,7 @@
 @import "~bulma/sass/utilities/_all";
 
 // Import a Google Font
-@import url("https://fonts.googleapis.com/css?family=Nunito:300,400,700");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Roboto+Mono:wght@300;400;700&display=swap");
 
 // Set your colors
 $purple: #8a4d76;
@@ -17,7 +17,8 @@ $twitter: #4099ff;
 $twitter-invert: findColorInvert($twitter);
 
 // Update Bulma's global variables
-$family-sans-serif: "Nunito", sans-serif;
+$family-primary: "Noto Sans", sans-serif;
+$family-monospace: "VT323", monospace;
 $widescreen-enabled: true;
 $fullhd-enabled: true;
 
@@ -27,6 +28,10 @@ $body-background-color: radial-gradient(ellipse at bottom, #24252a 0%, #090a0f 1
 $control-border-width: 2px;
 $input-border-color: transparent;
 $input-shadow: none;
+$radius: 0px;
+$radius-small: 0px;
+$radius-large: 0px;
+$easing: ease-in-out;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (

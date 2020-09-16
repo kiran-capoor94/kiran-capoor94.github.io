@@ -1,38 +1,20 @@
 <template>
-  <div id="app">
+  <div id="app" class="py-3">
     <header class="header">
       <Navbar />
     </header>
 
-    <main class="main">
+    <main class="main py-3">
       <slot />
     </main>
 
-    <footer class="footer">
-      <span class="footer__copyright">Copyright © {{ new Date().getFullYear() }}.</span>
-      <span class="footer__links">
-        Powered by
-        <b-button type="is-primary is-small" class="mx-1" href="//gridsome.org" outlined>Gridsome</b-button>
-        <b-button
-          type="is-primary is-small"
-          class="mx-1"
-          href="https://bulma.io/"
-          outlined
-        >Bulma CSS</b-button>
-        <b-button
-          type="is-primary is-light"
-          size="is-small"
-          class="mx-1"
-          href="https://icons8.com"
-          outlined
-        >Icons8</b-button>
-      </span>
-    </footer>
+    <Footer />
   </div>
 </template>
 
 <script>
 import Navbar from "~/components/Navbar.vue";
+import Footer from "~/components/Footer.vue";
 
 export default {
   props: {
@@ -40,6 +22,7 @@ export default {
   },
   components: {
     Navbar,
+    Footer,
   },
 };
 </script>

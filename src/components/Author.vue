@@ -14,10 +14,15 @@
     </div>
     <div class="column">
       <h1 class="title is-family-monospace ml-3 is-size-3">Kiran Capoor | Full Stack Engineer</h1>
-      
-      <div class="columns has-text-centered mx-3">
-        <div class="column" v-for="tech in techStack" :key="tech.name">
-          <b-collapse class="panel" animation="slide" v-model="tech.isOpen" :aria-id="tech.ariaId">
+
+      <div class="columns has-text-centered mx-3 is-multiline">
+        <div class="column is-4" v-for="tech in techStack" :key="tech.name">
+          <b-collapse
+            class="panel kc-panel"
+            animation="slide"
+            v-model="tech.isOpen"
+            :aria-id="tech.ariaId"
+          >
             <div slot="trigger" class="panel-heading" role="button" :aria-controls="tech.ariaId">
               <g-image :src="tech.icon" width="30" height="30" blur="5" />
             </div>
@@ -42,48 +47,48 @@ export default {
   props: ["showTitle"],
   data() {
     return {
-      isOpen: false,
       techStack: [
         {
           name: "python",
           icon: "https://img.icons8.com/color/48/000000/python.png",
           ariaId: "pythonCollapsible",
-          isOpen: false,
+          isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          border: "border-colour: #0277BD;",
         },
         {
           name: "django",
           icon: "https://img.icons8.com/color/48/000000/django.png",
           ariaId: "djangoCollapsible",
-          isOpen: false,
+          isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
         },
         {
           name: "javascript",
           icon: "https://img.icons8.com/color/48/000000/javascript.png",
           ariaId: "jsCollapsible",
-          isOpen: false,
+          isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
         },
         {
           name: "vue-js",
           icon: "https://img.icons8.com/color/48/000000/vue-js.png",
           ariaId: "vue-jsCollapsible",
-          isOpen: false,
+          isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
         },
         {
           name: "html-5",
           icon: "https://img.icons8.com/color/48/000000/html-5.png",
           ariaId: "html-5Collapsible",
-          isOpen: false,
+          isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
         },
         {
           name: "sass",
           icon: "https://img.icons8.com/color/48/000000/sass.png",
           ariaId: "sassCollapsible",
-          isOpen: false,
+          isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
         },
       ],

@@ -3,3 +3,16 @@
 .base_shadow {
 	box-shadow: 8px 8px 0px $primary, -8px 0px 0px $primary-light, 0px -8px 0px $secondary;
 }
+.kc-panel {
+	border: 5px solid transparent;
+	border: 2px solid $primary;
+	transition: 0.2s all linear;
+
+	&:hover {
+		box-shadow: 6px 6px 0px $grey-darker;
+	}
+}
+
+.br-bottom-secondary {
+	border-bottom: 1.5px solid $black;
+}
