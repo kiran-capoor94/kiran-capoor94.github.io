@@ -1,7 +1,7 @@
 <template>
   <Layout :show-logo="false">
     <!-- List posts -->
-    <section class="section">
+    <section class="section my-5">
       <div class="container">
         <div class="columns">
           <PostCard v-for="edge in $page.posts.edges" :key="edge.node.id" :post="edge.node" />

@@ -1,7 +1,7 @@
 @import "~bulma/sass/utilities/_all";
 
 // Import a Google Font
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Roboto+Mono:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Roboto+Mono:wght@300;500&display=swap");
 
 // Set your colors
 $purple: #8a4d76;
@@ -17,15 +17,15 @@ $twitter: #4099ff;
 $twitter-invert: findColorInvert($twitter);
 
 // Update Bulma's global variables
-$family-primary: "Noto Sans", sans-serif;
-$family-monospace: "VT323", monospace;
+$family-primary: "Jost", sans-serif;
+$family-monospace: "Roboto Mono", monospace;
 $widescreen-enabled: true;
 $fullhd-enabled: true;
 
 // Update some of Bulma's component variables
 $body-family: $family-sans-serif;
-$body-background-color: radial-gradient(ellipse at bottom, #24252a 0%, #090a0f 100%);
-$control-border-width: 2px;
+$body-background-color: $white;
+$control-border-width: 0px;
 $input-border-color: transparent;
 $input-shadow: none;
 $radius: 0px;
@@ -35,46 +35,46 @@ $easing: ease-in-out;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
-	"white": (
-		$white,
-		$black,
-	),
-	"black": (
-		$black,
-		$white,
-	),
-	"light": (
-		$light,
-		$light-invert,
-	),
-	"dark": (
-		$dark,
-		$dark-invert,
-	),
-	"primary": (
-		$primary,
-		$primary-invert,
-	),
-	"info": (
-		$info,
-		$info-invert,
-	),
-	"success": (
-		$success,
-		$success-invert,
-	),
-	"warning": (
-		$warning,
-		$warning-invert,
-	),
-	"danger": (
-		$danger,
-		$danger-invert,
-	),
-	"twitter": (
-		$twitter,
-		$twitter-invert,
-	),
+  "white": (
+    $white,
+    $black
+  ),
+  "black": (
+    $black,
+    $white
+  ),
+  "light": (
+    $light,
+    $light-invert
+  ),
+  "dark": (
+    $dark,
+    $dark-invert
+  ),
+  "primary": (
+    $primary,
+    $primary-invert
+  ),
+  "info": (
+    $info,
+    $info-invert
+  ),
+  "success": (
+    $success,
+    $success-invert
+  ),
+  "warning": (
+    $warning,
+    $warning-invert
+  ),
+  "danger": (
+    $danger,
+    $danger-invert
+  ),
+  "twitter": (
+    $twitter,
+    $twitter-invert
+  )
 );
 
 // Links
@@ -85,3 +85,4 @@ $link-focus-border: $primary;
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
+@import "~animate.css/animate.min.css";

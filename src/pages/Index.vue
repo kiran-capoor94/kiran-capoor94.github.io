@@ -1,9 +1,10 @@
 <template>
   <Layout :show-logo="false">
-    <!-- List posts -->
-    <section class="section">
-      <div class="container">
-        <Author />
+    <section class="hero is-link is-fullheight-with-navbar">
+      <div class="hero-body">
+        <div class="container">
+          <Author />
+        </div>
       </div>
     </section>
   </Layout>

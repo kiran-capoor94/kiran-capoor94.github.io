@@ -1,6 +1,11 @@
 <template>
   <div class="column">
     <div class="card">
+      <header class="card-header is-shadowless px-2 py-3">
+        <g-link :to="post.path">
+          <p class="card-header-title" v-html="post.title"></p>
+        </g-link>
+      </header>
       <div v-if="post.cover_image" :class="{'card-image' : post.poster}">
         <figure class="image is-4by3">
           <g-image
@@ -15,25 +20,9 @@
         </figure>
       </div>
       <div class="card-content">
-        <div class="media">
-          <div class="media-left">
-            <figure class="image is-48x48">
-              <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
-            </figure>
-          </div>
-          <div class="media-content">
-            <p class="title is-4" v-html="post.title"></p>
-            <PostMeta class="subtitle is-6" :post="post" />
-            <PostTags class="subtitle is-6" :post="post" />
-          </div>
-        </div>
-
+        <PostMeta class="subtitle is-6" :post="post" />
+        <PostTags class="subtitle is-6" :post="post" />
         <div class="content" v-html="post.description"></div>
-        <p class="card-footer-item">
-          <span>
-            <g-link :to="post.path">Link</g-link>
-          </span>
-        </p>
       </div>
     </div>
   </div>
