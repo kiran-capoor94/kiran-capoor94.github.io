@@ -17,7 +17,7 @@ tags:
     "VueJS",
   ]
 canonical_url: false
-description: "COVID 19 has been a disaster to almost every business & person, and my startup was not spared. Being a python & a web developer, I can build anything with my skill set. I just needed to find an opportunity."
+description: "COVID 19 has been a disaster to almost every business & person, and my startup was not spared. Being a python & a web developer, I can build anything with my skill set."
 ---
 
 COVID 19 has been a disaster to almost every business & person, and my startup was not spared. Being a python & a web developer, I can build anything with my skill set. I just needed to find an opportunity.

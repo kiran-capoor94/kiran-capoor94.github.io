@@ -8,12 +8,19 @@ module.exports = {
   siteName: 'Full Stack Engineer Portfolio',
   siteDescription: 'A simple, hackable & minimalistic starter for Gridsome that uses Markdown for content.',
   siteUrl: 'https://kira-capoor94.github.io',
+  icon: './src/kiran-capoor.png',
   templates: {
     Post: '/:title',
     Tag: '/tag/:id'
   },
 
   plugins: [
+    {
+      use: '@gridsome/plugin-google-analytics',
+      options: {
+        id: 'UA-155096471-2'
+      }
+    },
     {
       // Create posts from markdown files
       use: '@gridsome/source-filesystem',

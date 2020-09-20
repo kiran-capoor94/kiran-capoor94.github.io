@@ -1,22 +1,37 @@
 <template>
-  <div class="columns has-text-centered mx-3 is-multiline">
-    <div
-      class="column is-6 animate__animated"
-      :class="tech.animate__delay"
-      v-for="tech in techStack"
-      :key="tech.name"
-    >
-      <b-collapse
-        class="panel kc-panel"
-        animation="slide"
-        v-model="tech.isOpen"
-        :aria-id="tech.ariaId"
+  <div class>
+    <div class="columns has-text-centered mx-3 my-5 is-multiline">
+      <div
+        class="column is-6 animate__animated"
+        :class="tech.animate__delay"
+        v-for="tech in techStack"
+        :key="tech.name"
       >
-        <div slot="trigger" class="panel-heading" role="button" :aria-controls="tech.ariaId">
-          <g-image :src="tech.icon" width="90" height="90" blur="5" />
+        <div class="panel kc-card" :aria-id="tech.ariaId">
+          <div class="panel-heading">
+            <g-image :src="tech.icon" width="90" height="90" blur="5" />
+          </div>
         </div>
-        <div class="panel-block">{{ tech.content }}</div>
-      </b-collapse>
+      </div>
+    </div>
+    <div
+      class="mx-5 my-5 has-text-centered animate__animated animate__fadeInLeftBig animate__delay-5s"
+    >
+      <h2 class="title is-size-3">Other Technologies I deal with -</h2>
+    </div>
+    <div class="columns has-text-centered mx-3 my-5 is-multiline">
+      <div
+        class="column is-4 animate__animated"
+        :class="tech.animate__delay"
+        v-for="tech in subStack"
+        :key="tech.name"
+      >
+        <div class="panel kc-card" :aria-id="tech.ariaId">
+          <div class="panel-heading">
+            <g-image :src="tech.icon" width="90" height="90" blur="5" />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +44,7 @@ export default {
       techStack: [
         {
           name: "python",
-          icon: "https://img.icons8.com/color/48/000000/python.png",
+          icon: "https://img.icons8.com/color/96/000000/python.png",
           ariaId: "pythonCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
@@ -38,7 +53,7 @@ export default {
         },
         {
           name: "django",
-          icon: "https://img.icons8.com/color/48/000000/django.png",
+          icon: "https://img.icons8.com/color/96/000000/django.png",
           ariaId: "djangoCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
@@ -46,7 +61,7 @@ export default {
         },
         {
           name: "javascript",
-          icon: "https://img.icons8.com/color/48/000000/javascript.png",
+          icon: "https://img.icons8.com/color/96/000000/javascript.png",
           ariaId: "jsCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
@@ -54,7 +69,7 @@ export default {
         },
         {
           name: "vue-js",
-          icon: "https://img.icons8.com/color/48/000000/vue-js.png",
+          icon: "https://img.icons8.com/color/96/000000/vue-js.png",
           ariaId: "vue-jsCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
@@ -62,7 +77,7 @@ export default {
         },
         {
           name: "html-5",
-          icon: "https://img.icons8.com/color/48/000000/html-5.png",
+          icon: "https://img.icons8.com/color/96/000000/html-5.png",
           ariaId: "html-5Collapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
@@ -70,11 +85,87 @@ export default {
         },
         {
           name: "sass",
-          icon: "https://img.icons8.com/color/48/000000/sass.png",
+          icon: "https://img.icons8.com/color/96/000000/sass.png",
           ariaId: "sassCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           animate__delay: "animate__fadeInRightBig animate__delay-4s",
+        },
+      ],
+      subStack: [
+        {
+          name: "css3",
+          icon: "https://img.icons8.com/color/96/000000/css3.png",
+          ariaId: "css3Collapsible",
+          isOpen: true,
+          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+        },
+        {
+          name: "bootstrap",
+          icon: "https://img.icons8.com/color/96/000000/bootstrap.png",
+          ariaId: "bootstrapCollapsible",
+          isOpen: true,
+          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+        },
+        {
+          name: "docker",
+          icon: "https://img.icons8.com/color/96/000000/docker.png",
+          ariaId: "dockerCollapsible",
+          isOpen: true,
+          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+        },
+        {
+          name: "amazon-web-services",
+          icon:
+            "https://img.icons8.com/color/96/000000/amazon-web-services.png",
+          ariaId: "awsCollapsible",
+          isOpen: true,
+          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+        },
+        {
+          name: "microsoft-azure",
+          icon: "https://img.icons8.com/color/96/000000/azure.png",
+          ariaId: "microsoftAzureCollapsible",
+          isOpen: true,
+          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+        },
+        {
+          name: "heroku",
+          icon: "https://img.icons8.com/color/96/000000/heroku.png",
+          ariaId: "herokuCollapsible",
+          isOpen: true,
+          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+        },
+        {
+          name: "google-cloud-platform",
+          icon:
+            "https://img.icons8.com/color/96/000000/google-cloud-platform.png",
+          ariaId: "gcpCollapsible",
+          isOpen: true,
+          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+        },
+        {
+          name: "api",
+          icon: "https://img.icons8.com/fluent/96/000000/api.png",
+          ariaId: "apiCollapsible",
+          isOpen: true,
+          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+        },
+        {
+          name: "graphql",
+          icon: "https://img.icons8.com/color/96/000000/graphql.png",
+          ariaId: "graphqlCollapsible",
+          isOpen: true,
+          content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          animate__delay: "animate__fadeInRightBig animate__delay-5s",
         },
       ],
     };

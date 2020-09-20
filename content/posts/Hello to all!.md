@@ -13,10 +13,8 @@ tags:
     "discuss",
   ]
 canonical_url: false
-description: "Founder, developer, and innovator at Texmith. Assisted MSCI in saving 400 man-hours by designing an automation system, which was then implemented by eClerx at the organizational level. Python and technology are my passion. Designing, building, and implementing solutions is something that I have done since my teenage years."
+description: "Founder, developer, and innovator at Texmith. Python and technology are my passion. Designing, building, and implementing solutions is something that I have done since my teenage years."
 ---
-
-## Hello to all
 
 Founder, developer, and innovator at Texmith.
 

@@ -4,6 +4,7 @@ import '~/assets/sass/index.scss'
 import VueTypedJs from 'vue-typed-js'
 import VueParticles from 'vue-particles'
 import DefaultLayout from '~/layouts/Default.vue'
+import VueSocialSharing from 'vue-social-sharing'
 
 // The Client API can be used here. Learn more: gridsome.org/docs/client-api
 export default function (Vue, { router, head, isClient }) {
@@ -14,6 +15,7 @@ export default function (Vue, { router, head, isClient }) {
   })
   Vue.use(VueTypedJs)
   Vue.use(VueParticles)
+  Vue.use(VueSocialSharing);
   Vue.use(Buefy, {
     defaultIconPack: ['fas', 'fab', 'fad'] // Font Awesome Solid
   })

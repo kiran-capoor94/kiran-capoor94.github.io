@@ -27,24 +27,26 @@
         <span>
           <h1>Namaste</h1>
         </span>
-        <span class="mx-5 py-2 is-vcentered animate__animated animate__bounce animate__delay-1s">
+        <span class="py-2 is-vcentered animate__animated animate__bounce animate__delay-1s">
           <g-image src="https://img.icons8.com/color/48/000000/pray.png" />
         </span>
       </div>
-      <div class="is-flex">
-        <h2 class="is-family-monospace is-size-1">I'm Kiran Capoor | UI/UX Designer, Full Stack Dev</h2>
+      <hr style="background-color: #000;" />
+      <div class="is-flex has-background-black">
+        <h2
+          class="is-family-monospace is-size-1 has-text-white"
+          style="margin: auto auto auto 0px;"
+        >I'm Kiran Capoor</h2>
       </div>
+      <hr style="background-color: #000;" />
+      <div>
+        <h3 class="is-family-monospace is-size-3">Full Stack Developer</h3>
+      </div>
+      <hr style="background-color: #000;" />
+      <b-button tag="a" href="mailto:kiran.capoor94@gmail.com" type="is-dark" class="mx-1">Hire Me?</b-button>
     </div>
   </div>
 </template>
-
-<static-query>
-query {
-  metadata {
-    siteName
-  }
-}
-</static-query>
 
 <script>
 export default {

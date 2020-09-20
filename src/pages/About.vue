@@ -6,21 +6,34 @@
           <div class="pt-3">
             <Author />
           </div>
-          <hr style="width:70%; margin-left:auto;" />
           <div class="columns is-mobile is-centered">
             <div class="column is-3-desktop is-hidden-mobile"></div>
-            <div class="column has-background-white-bis">
-              <p class="subtitle has-text-justified px-5 pb-5 pt-3">
+            <div class="column">
+              <p class="subtitle has-text-justified px-5 pb-5 pt-3 has-background-white-bis">
+                Life sows the seeds of the future in us, in every present moment.
+                Kiran Capoor, Capoor with a ‘C’ as he says it, is an ordinary boy with
+                extraordinary dreams. He’s a survivor, a go-getter to the core! Early in life,
+                he had hands-on training at being physically weak but mentally strong and unbreakable.
+                Coming from a modest and humble middle-class family, he also has in him instilled the
+                ‘humor’ gene. He seeks to bring joy and hopes to those around them, the ones he can
+                reach in his circle.
+              </p>
+              <hr style="background-color: #e5e5e5;" />
+              <p class="subtitle has-text-justified px-5 pb-5 pt-3 has-background-white-bis">
                 Following the general cultures prevalent in an Indian household, education was an
                 emphasis all-through. He has a bachelor’s degree in Chemistry, that allows him today
                 to mix all the creative strategies and systemic thinking into a brand new ‘solution’ (pun intended).
-                <br />
-                <br />Finances being the lifeblood of business, he went on to get a master’s degree in finance.
+              </p>
+              <hr style="background-color: #e5e5e5;" />
+              <p class="subtitle has-text-justified px-5 pb-5 pt-3 has-background-white-bis">
+                Finances being the lifeblood of business, he went on to get a master’s degree in finance.
                 He uses the same effect to do his data analytics and negotiations, and all the trend analysis
                 charts you will see from him as a client. An entrepreneur at the core, he went on to grab
                 a couple of certificates in marketing and mastering ‘Python’ (a development language for computers).
-                <br />
-                <br />He has come in a long way, training, learning, and unlearning the varied aspects of the
+              </p>
+              <hr style="background-color: #e5e5e5;" />
+              <p class="subtitle has-text-justified px-5 pb-5 pt-3 has-background-white-bis">
+                He has come in a long way, training, learning, and unlearning the varied aspects of the
                 business. From being a reserved, quiet, and shy boy with a sheepish grin, he’s transformed
                 into a leader who closes deals and speaks to the influencers of the industries he caters to.
                 He mastered the soft skills he needed for business, went around speaking to people, and being
@@ -30,13 +43,16 @@
                 be a digital solutions provider. Kiran has successfully managed to do on-the-job training for himself,
                 finding investors, getting clients, gathering a team of experts in varied fields to work with him,
                 as well as to create an environment conducive for growth.
-                <br />
-                <br />He faced his share of the rollercoaster ride and today from one person to many and one client to
+              </p>
+              <hr style="background-color: #e5e5e5;" />
+              <p class="subtitle has-text-justified px-5 pb-5 pt-3 has-background-white-bis">
+                He faced his share of the rollercoaster ride and today from one person to many and one client to
                 fifty-plus clients, he is the motivator and entertainer who keeps his team alive. He has a unique
                 approach that allows him to add value to clients in a sustainable and growth-based format. Texmith
                 finished its first 100 projects in a span of three years, by 2020 and looks to deliver many-more under
                 the leadership of this young, dynamic, and jovial leader.
               </p>
+              <hr style="background-color: #e5e5e5;" />
             </div>
           </div>
         </div>

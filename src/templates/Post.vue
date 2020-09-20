@@ -1,57 +1,85 @@
 <template>
   <Layout>
-    <div class="post-title">
-      <h1 class="post-title__text">
-        {{ $page.post.title }}
-      </h1>
-
-      <PostMeta :post="$page.post" />
-
-    </div>
-
-    <div class="post content-box">
-      <div class="post__header">
-        <g-image alt="Cover image" v-if="$page.post.cover_image" :src="$page.post.cover_image" />
-      </div>
-
-      <div class="post__content" v-html="$page.post.content" />
-
-      <div class="post__footer">
-        <PostTags :post="$page.post" />
-      </div>
-    </div>
-
-    <div class="post-comments">
-      <!-- Add comment widgets here -->
-    </div>
-
-    <Author class="post-author" />
+    <section>
+      <section class="hero is-link is-fullheight-with-navbar">
+        <div class="hero-body">
+          <div class="container">
+            <div class="columns pt-3">
+              <div class="column is-vcentered has-text-centered-mobile">
+                <div class="is-flex has-background-black">
+                  <h2
+                    class="is-family-monospace is-size-1 has-text-white"
+                    style="margin: auto auto auto 0px;"
+                  >{{ $page.post.title }}</h2>
+                </div>
+                <hr style="background-color: #000;" />
+                <div>
+                  <h3 class="is-family-monospace is-size-4">
+                    <PostMeta :post="$page.post" />
+                  </h3>
+                </div>
+                <hr style="background-color: #000;" />
+                <div>
+                  <ShareNetwork
+                    network="facebook"
+                    url="https://news.vuejs.org/issues/180"
+                    :title="$page.post.title"
+                    :description=""
+                    :hashtags=""
+                  >Share on Facebook</ShareNetwork>
+                </div>
+                <hr style="background-color: #000;" />
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column"></div>
+              <div class="post content-box">
+                <div class="post__header has-text-centered">
+                  <g-image
+                    alt="Cover image"
+                    v-if="$page.post.cover_image"
+                    :src="$page.post.cover_image"
+                  />
+                </div>
+                <div
+                  class="subtitle has-text-justified px-5 pb-5 pt-3 has-background-white-bis"
+                  v-html="$page.post.content"
+                />
+                <div class="post__footer">
+                  <PostTags :post="$page.post" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
   </Layout>
 </template>
 
 <script>
-import PostMeta from '~/components/PostMeta'
-import PostTags from '~/components/PostTags'
-import Author from '~/components/Author.vue'
+import PostMeta from "~/components/PostMeta";
+import PostTags from "~/components/PostTags";
+import Author from "~/components/Author.vue";
 
 export default {
   components: {
     Author,
     PostMeta,
-    PostTags
+    PostTags,
   },
-  metaInfo () {
+  metaInfo() {
     return {
       title: this.$page.post.title,
       meta: [
         {
-          name: 'description',
-          content: this.$page.post.description
-        }
-      ]
-    }
-  }
-}
+          name: "description",
+          content: this.$page.post.description,
+        },
+      ],
+    };
+  },
+};
 </script>
 
 <page-query>
@@ -74,58 +102,4 @@ query Post ($id: ID!) {
 </page-query>
 
 <style lang="scss">
-.post-title {
-  padding: calc(var(--space) / 2) 0 calc(var(--space) / 2);
-  text-align: center;
-}
-
-.post {
-
-  &__header {
-    width: calc(100% + var(--space) * 2);
-    margin-left: calc(var(--space) * -1);
-    margin-top: calc(var(--space) * -1);
-    margin-bottom: calc(var(--space) / 2);
-    overflow: hidden;
-    border-radius: var(--radius) var(--radius) 0 0;
-
-    img {
-      width: 100%;
-    }
-
-    &:empty {
-      display: none;
-    }
-  }
-
-  &__content {
-    h2:first-child {
-      margin-top: 0;
-    }
-
-    p:first-of-type {
-      font-size: 1.2em;
-      color: var(--title-color);
-    }
-
-    img {
-      width: calc(100% + var(--space) * 2);
-      margin-left: calc(var(--space) * -1);
-      display: block;
-      max-width: none;
-    }
-  }
-}
-
-.post-comments {
-  padding: calc(var(--space) / 2);
-
-  &:empty {
-    display: none;
-  }
-}
-
-.post-author {
-  margin-top: calc(var(--space) / 2);
-}
 </style>
