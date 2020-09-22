@@ -35,6 +35,10 @@ $easing: ease-in-out;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
+  "transparent": (
+    transparent,
+    $white
+  ),
   "white": (
     $white,
     $black

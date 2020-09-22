@@ -1,13 +1,43 @@
 <template>
-  <footer class="footer has-background-black has-text-white">
-    <span class="footer__copyright">Copyright © {{ new Date().getFullYear() }} | Kiran Capoor</span>
-    <p class="footer__links">
-      <b-button tag="a" type="is-primary" class="mx-1 is-link" href="https://gridsome.org">Gridsome</b-button>
-      <b-button tag="a" type="is-primary" class="mx-1" href="https://vuejs.org/">VueJS</b-button>
-      <b-button tag="a" type="is-primary" class="mx-1" href="https://buefy.org/">Buefy</b-button>
-      <b-button tag="a" type="is-primary" class="mx-1" href="https://bulma.io/">Bulma CSS</b-button>
-      <b-button tag="a" type="is-primary" class="mx-1" href="https://icons8.com">Icons8</b-button>
-    </p>
+  <footer class="has-background-black has-text-white">
+    <!-- Main container -->
+    <nav class="level">
+      <!-- Left side -->
+      <div class="level-left">
+        <div class="level-item">
+          <span class="footer__copyright">Copyright © {{ new Date().getFullYear() }} | Kiran Capoor</span>
+        </div>
+      </div>
+
+      <!-- Right side -->
+      <div class="level-right px-3">
+        <p class="level-item">
+          <b-button
+            tag="a"
+            type="is-primary is-small"
+            class="mx-1"
+            href="https://gridsome.org"
+          >Gridsome</b-button>
+        </p>
+        <p class="level-item">
+          <b-button tag="a" type="is-primary is-small" class="mx-1" href="https://vuejs.org/">VueJS</b-button>
+        </p>
+        <p class="level-item">
+          <b-button tag="a" type="is-primary is-small" class="mx-1" href="https://buefy.org/">Buefy</b-button>
+        </p>
+        <p class="level-item">
+          <b-button
+            tag="a"
+            type="is-primary is-small"
+            class="mx-1"
+            href="https://bulma.io/"
+          >Bulma CSS</b-button>
+        </p>
+        <p class="level-item">
+          <b-button tag="a" type="is-primary is-small" class="mx-1" href="https://icons8.com">Icons8</b-button>
+        </p>
+      </div>
+    </nav>
   </footer>
 </template>
 

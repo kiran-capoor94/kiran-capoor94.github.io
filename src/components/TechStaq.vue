@@ -14,9 +14,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="mx-5 my-5 has-text-centered animate__animated animate__fadeInLeftBig animate__delay-5s"
-    >
+    <div class="mx-5 my-5 has-text-centered animate__animated animate__fadeInLeftBig">
       <h2 class="title is-size-3">Other Technologies I deal with -</h2>
     </div>
     <div class="columns has-text-centered mx-3 my-5 is-multiline">
@@ -49,7 +47,7 @@ export default {
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           border: "border-colour: #0277BD;",
-          animate__delay: "animate__fadeInLeftBig animate__delay",
+          animate__delay: "animate__fadeInLeftBig",
         },
         {
           name: "django",
@@ -57,7 +55,7 @@ export default {
           ariaId: "djangoCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-1s",
+          animate__delay: "animate__fadeInRightBig",
         },
         {
           name: "javascript",
@@ -65,7 +63,7 @@ export default {
           ariaId: "jsCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInLeftBig animate__delay-2s",
+          animate__delay: "animate__fadeInLeftBig",
         },
         {
           name: "vue-js",
@@ -73,7 +71,7 @@ export default {
           ariaId: "vue-jsCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-2s",
+          animate__delay: "animate__fadeInRightBig",
         },
         {
           name: "html-5",
@@ -81,7 +79,7 @@ export default {
           ariaId: "html-5Collapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInLeftBig animate__delay-3s",
+          animate__delay: "animate__fadeInLeftBig",
         },
         {
           name: "sass",
@@ -89,7 +87,7 @@ export default {
           ariaId: "sassCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-4s",
+          animate__delay: "animate__fadeInRightBig",
         },
       ],
       subStack: [
@@ -99,7 +97,7 @@ export default {
           ariaId: "css3Collapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+          animate__delay: "animate__fadeInRightBig ",
         },
         {
           name: "bootstrap",
@@ -107,7 +105,7 @@ export default {
           ariaId: "bootstrapCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+          animate__delay: "animate__fadeInRightBig ",
         },
         {
           name: "docker",
@@ -115,7 +113,7 @@ export default {
           ariaId: "dockerCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+          animate__delay: "animate__fadeInRightBig ",
         },
         {
           name: "amazon-web-services",
@@ -124,7 +122,7 @@ export default {
           ariaId: "awsCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+          animate__delay: "animate__fadeInRightBig ",
         },
         {
           name: "microsoft-azure",
@@ -132,7 +130,7 @@ export default {
           ariaId: "microsoftAzureCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+          animate__delay: "animate__fadeInRightBig ",
         },
         {
           name: "heroku",
@@ -140,7 +138,7 @@ export default {
           ariaId: "herokuCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+          animate__delay: "animate__fadeInRightBig ",
         },
         {
           name: "google-cloud-platform",
@@ -149,7 +147,7 @@ export default {
           ariaId: "gcpCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+          animate__delay: "animate__fadeInRightBig ",
         },
         {
           name: "api",
@@ -157,7 +155,7 @@ export default {
           ariaId: "apiCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+          animate__delay: "animate__fadeInRightBig ",
         },
         {
           name: "graphql",
@@ -165,7 +163,7 @@ export default {
           ariaId: "graphqlCollapsible",
           isOpen: true,
           content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-          animate__delay: "animate__fadeInRightBig animate__delay-5s",
+          animate__delay: "animate__fadeInRightBig ",
         },
       ],
     };

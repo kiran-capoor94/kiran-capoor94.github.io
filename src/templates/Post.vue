@@ -19,14 +19,24 @@
                   </h3>
                 </div>
                 <hr style="background-color: #000;" />
-                <div>
+                <div class="buttons">
                   <ShareNetwork
-                    network="facebook"
-                    url="https://news.vuejs.org/issues/180"
+                    v-for="network in networks"
+                    :network="network.network"
+                    :key="network.network"
+                    :style="{backgroundColor: network.color}"
+                    :url="`https://kiran-capoor94@github.io${$page.post.path}`"
                     :title="$page.post.title"
-                    :description=""
-                    :hashtags=""
-                  >Share on Facebook</ShareNetwork>
+                    :description="$page.post.description"
+                    hashtags="vuejs,vite"
+                  >
+                    <div class="button is-transparent" style="margin:auto;">
+                      <span class="mr-3">
+                        <i :class="network.icon"></i>
+                      </span>
+                      <span>{{ network.name }}</span>
+                    </div>
+                  </ShareNetwork>
                 </div>
                 <hr style="background-color: #000;" />
               </div>
@@ -63,6 +73,67 @@ import PostTags from "~/components/PostTags";
 import Author from "~/components/Author.vue";
 
 export default {
+  name: "SinglePost",
+  data() {
+    return {
+      networks: [
+        {
+          network: "email",
+          name: "Email",
+          icon: "fas fa-lg fa-envelope",
+          color: "#333333",
+        },
+        {
+          network: "facebook",
+          name: "Facebook",
+          icon: "fab fah fa-lg fa-facebook-f",
+          color: "#1877f2",
+        },
+        {
+          network: "linkedin",
+          name: "LinkedIn",
+          icon: "fab fah fa-lg fa-linkedin",
+          color: "#007bb5",
+        },
+        {
+          network: "pinterest",
+          name: "Pinterest",
+          icon: "fab fah fa-lg fa-pinterest",
+          color: "#bd081c",
+        },
+        {
+          network: "quora",
+          name: "Quora",
+          icon: "fab fah fa-lg fa-quora",
+          color: "#a82400",
+        },
+        {
+          network: "reddit",
+          name: "Reddit",
+          icon: "fab fah fa-lg fa-reddit-alien",
+          color: "#ff4500",
+        },
+        {
+          network: "sms",
+          name: "SMS",
+          icon: "far fah fa-lg fa-comment-dots",
+          color: "#333333",
+        },
+        {
+          network: "telegram",
+          name: "Telegram",
+          icon: "fab fah fa-lg fa-telegram-plane",
+          color: "#0088cc",
+        },
+        {
+          network: "whatsapp",
+          name: "Whatsapp",
+          icon: "fab fah fa-lg fa-whatsapp",
+          color: "#25d366",
+        },
+      ],
+    };
+  },
   components: {
     Author,
     PostMeta,
@@ -100,6 +171,3 @@ query Post ($id: ID!) {
   }
 }
 </page-query>
-
-<style lang="scss">
-</style>

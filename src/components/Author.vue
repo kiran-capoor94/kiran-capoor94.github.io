@@ -23,12 +23,12 @@
       </div>
     </div>
     <div class="column is-vcentered has-text-centered-mobile">
-      <div class="is-family-monospace is-size-1 is-inline-block has-text-centered-mobile">
+      <div class="is-inline-block has-text-centered-mobile">
         <span>
-          <h1>Namaste</h1>
+          <h1 class="is-family-monospace is-size-1">Namaste</h1>
         </span>
         <span class="py-2 is-vcentered animate__animated animate__bounce animate__delay-1s">
-          <g-image src="https://img.icons8.com/color/48/000000/pray.png" />
+          <g-image src="https://img.icons8.com/color/96/000000/pray.png" width="75" height="75" />
         </span>
       </div>
       <hr style="background-color: #000;" />
