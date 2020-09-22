@@ -16,6 +16,7 @@ tags:
     "django",
     "VueJS",
   ]
+cover_image: ./images/alexandr-podvalny-220262-unsplash.jpg
 canonical_url: false
 description: "COVID 19 has been a disaster to almost every business & person, and my startup was not spared. Being a python & a web developer, I can build anything with my skill set."
 ---
