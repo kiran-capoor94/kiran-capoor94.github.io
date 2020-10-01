@@ -52,7 +52,7 @@
                   />
                 </div>
                 <div
-                  class="subtitle has-text-justified px-5 pb-5 pt-3 has-background-white-bis"
+                  class="content has-text-justified px-5 py-5 mt-3 has-background-white-bis"
                   v-html="$page.post.content"
                 />
                 <div class="post__footer">

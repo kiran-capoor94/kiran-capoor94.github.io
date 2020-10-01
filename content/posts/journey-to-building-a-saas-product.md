@@ -31,21 +31,24 @@ What most indie developers like to do is think about their app first, what featu
 
 Being a businessman & a Dev, I thought first of the opportunity, it’s pros, it’s cons & lastly the market that I intend to target. As to me, customers come first then the app and then the monetary aspects.
 
-While searching for an opportunity, I stumbled upon ‘Email Marketing’. Email marketing for the most part has been driven by analytics, data, automation, and personalization. It’s one of the most underrated methods in Digital Marketing as it requires in-depth knowledge about your target audience than any other technique, but has the opportunity to become the largest conversion technique in the shortest amount of time.
+While searching for an opportunity, I stumbled upon *‘Email Marketing’*. Email marketing for the most part has been driven by analytics, data, automation, and personalization. It’s one of the most underrated methods in Digital Marketing as it requires in-depth knowledge about your target audience than any other technique, but has the opportunity to become the largest conversion technique in the shortest amount of time.
 
-A great copy, a simple email sending tool, and knowledge about your targets are all you really need to succeed at Email Marketing.
-Tools like Mailchimp & Sendgrid provide with everything at an extravagant cost. Upon closer inspection using AWS’s Cost Estimates & bits of Excel data modeling.
+A great copy, a simple email sending tool, and knowledge about your targets are all you really need to succeed at Email Marketing.  
+Tools like Mailchimp & Sendgrid provide with everything at an extravagant cost. Upon closer inspection using **AWS’s Cost Estimates** & bits of Excel data modeling.
 
 I found a few points –
 
-1. Price to cost ratio was manageable for a small startup like mine.
-2. I can offer ‘core’ features at a really low cost ~\$10 for 10,000 to 50,000 emails.
-3. A customer-centric approach is the best way forward.
-4. Automation will be built at a later stage as I will need data as to how much of that solution is beneficial for my customers.
-5. Drag and drop Templates are great to use but have issues with Email Clients. In the first release, I will have to keep this solution aside until I find a complete answer to this problem.
+1. **Price to cost ratio** was manageable for a small startup like mine.
+2. I can offer ‘core’ features at a **really low cost** _~\$10 for 10,000 to 50,000 emails_.
+3. A **customer-centric approach** is the best way forward.
+4. Automation will be built at a later stage as I will need data as to how much of that _solution is beneficial for my customers_.
+5. Drag and drop Templates are great to use but have issues with Email Clients.
+6. In the first release, *I will have to keep this solution aside until I find a complete answer to this problem*.
 
 ## Where to begin?
 
-This question puzzled me for the longest time. The answer was simple. Design a Plan Of Action.
+This question puzzled me for the longest time. The answer was simple.
 
-Will be continued in the next part. Thanks for reading 😁
+**Design a Plan Of Action.**
+
+_Will be continued in the next part. Thanks for reading_ 😁

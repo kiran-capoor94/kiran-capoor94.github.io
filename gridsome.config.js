@@ -41,9 +41,8 @@ module.exports = {
   transformers: {
     //Add markdown support to all file-system sources
     remark: {
-      externalLinksTarget: '_blank',
-      externalLinksRel: ['nofollow', 'noopener', 'noreferrer'],
-      anchorClassName: 'icon icon-link',
+      autolinkHeadings: false,
+      squeezeParagraphs: false,
       plugins: [
         '@gridsome/remark-prismjs'
       ]

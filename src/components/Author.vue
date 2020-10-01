@@ -43,7 +43,20 @@
         <h3 class="is-family-monospace is-size-3">Full Stack Developer</h3>
       </div>
       <hr style="background-color: #000;" />
-      <b-button tag="a" href="mailto:kiran.capoor94@gmail.com" type="is-dark" class="mx-1">Hire Me?</b-button>
+      <div>
+        <b-button
+          tag="a"
+          href="mailto:kiran.capoor94@gmail.com"
+          type="is-dark"
+          class="mx-1"
+        >Hire Me?</b-button>
+        <b-button
+          tag="a"
+          href="https://www.linkedin.com/in/kiran-capoor/"
+          type="is-info"
+          class="mx-1"
+        >LinkedIn</b-button>
+      </div>
     </div>
   </div>
 </template>
