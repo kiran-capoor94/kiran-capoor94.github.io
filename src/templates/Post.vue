@@ -17,6 +17,9 @@
                   <h3 class="is-family-monospace is-size-4">
                     <PostMeta :post="$page.post" />
                   </h3>
+                  <h3 class="is-family-monospace is-size-4 my-2">
+                    <PostTags :post="$page.post" />
+                  </h3>
                 </div>
                 <hr style="background-color: #000;" />
                 <div class="buttons">
@@ -56,7 +59,7 @@
                   v-html="$page.post.content"
                 />
                 <div class="post__footer">
-                  <PostTags :post="$page.post" />
+
                 </div>
               </div>
             </div>

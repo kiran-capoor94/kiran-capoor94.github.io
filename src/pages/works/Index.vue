@@ -136,7 +136,7 @@
                     </div>
                     <g-image src="~/assets/images/envelope.png" />
                     <b-button class="my-3" type="is-danger"
-                      >Under Developement</b-button
+                      >Deprecated</b-button
                     >
                   </article>
                 </div>
@@ -345,7 +345,7 @@
                 </div>
                 <div class="tile is-parent">
                   <article class="tile is-child kc-card">
-                    <p class="kc-card__title">Texmith</p>
+                    <p class="kc-card__title">Envelope v2</p>
                     <div
                       class="field is-grouped is-grouped-multiline px-3 py-2"
                     >
@@ -359,7 +359,20 @@
                       <div class="control">
                         <div class="tags has-addons">
                           <span class="tag is-dark">Django</span>
-                          <span class="tag is-success">v2.2</span>
+                          <span class="tag is-success">v3.1</span>
+                        </div>
+                      </div>
+                      <div class="control">
+                        <div class="tags has-addons">
+                          <span class="tag is-dark">UI Frameworks</span>
+                          <span class="tag is-light">Vuetify</span>
+                        </div>
+                      </div>
+
+                      <div class="control">
+                        <div class="tags has-addons">
+                          <span class="tag is-dark">VueJS</span>
+                          <span class="tag is-success">v2</span>
                         </div>
                       </div>
 
@@ -380,31 +393,24 @@
                       <div class="control">
                         <div class="tags has-addons">
                           <span class="tag is-dark">JS</span>
-                          <span class="tag is-danger">ES2015</span>
-                        </div>
-                      </div>
-
-                      <div class="control">
-                        <div class="tags has-addons">
-                          <span class="tag is-dark">BootStrap</span>
-                          <span class="tag is-primary">v4.5</span>
+                          <span class="tag is-danger">ECMAScript 2016</span>
                         </div>
                       </div>
 
                       <div class="control">
                         <div class="tags has-addons">
                           <span class="tag is-dark">Year</span>
-                          <span class="tag is-primary">2019</span>
+                          <span class="tag is-primary">2020</span>
                         </div>
                       </div>
                     </div>
-                    <g-image src="~/assets/images/texmith.png" />
+                    <g-image src="~/assets/images/envelope.png" />
                     <b-button
                       class="my-3"
-                      tag="a"
-                      href="https://texmith.com/"
-                      type="is-dark"
-                      >Visit</b-button
+                      type="is-info"
+                      tag="router-link"
+                      to="/works/envelope"
+                      >Read More</b-button
                     >
                   </article>
                 </div>

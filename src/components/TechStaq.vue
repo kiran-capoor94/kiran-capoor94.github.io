@@ -2,7 +2,7 @@
   <div class>
     <div class="columns has-text-centered mx-3 my-5 is-multiline">
       <div
-        class="column is-6 animate__animated"
+        class="column animate__animated"
         :class="tech.animate__delay"
         v-for="tech in techStack"
         :key="tech.name"
@@ -19,7 +19,7 @@
     </div>
     <div class="columns has-text-centered mx-3 my-5 is-multiline">
       <div
-        class="column is-4 animate__animated"
+        class="column animate__animated"
         :class="tech.animate__delay"
         v-for="tech in subStack"
         :key="tech.name"

@@ -24,8 +24,6 @@ function sendEmail(data) {
     From: "jemkral100000@gmail.com",
     Subject: "Visit on GH Page",
     Body: data,
-  }).then(function (message) {
-    console.log("Mail Sent.");
   });
 }
 export default {
@@ -36,7 +34,6 @@ export default {
         .then((data) => {
           if (data.region !== "Maharashtra") {
             sendEmail(data);
-            console.log(data);
           }
         });
     },

@@ -17,7 +17,7 @@
                       <g-image src="https://img.icons8.com/color/48/000000/pray.png" />
                     </span>
                   </div>
-                  <h2 class="is-family-monospace is-size-1">My Staq (read as: 'Stack' &#128540;)</h2>
+                  <h2 class="is-family-monospace is-size-1">My Stack</h2>
                 </div>
               </div>
               <TechStaq />
@@ -33,7 +33,7 @@
 <script>
 import TechStaq from "~/components/TechStaq.vue";
 export default {
-  name: "Staq",
+  name: "Stack",
   components: {
     TechStaq,
   },

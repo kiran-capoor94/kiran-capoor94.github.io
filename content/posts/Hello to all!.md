@@ -16,7 +16,9 @@ canonical_url: false
 description: "Founder, developer, and innovator at Texmith. Python and technology are my passion. Designing, building, and implementing solutions is something that I have done since my teenage years."
 ---
 
-**Founder, developer, and innovator at [Texmith](https://texmith.com).**
+**Senior Software Engineer at [BeamX Techlabs Pvt Ltd](https://beamx.co).**
+
+**Former Founder, developer, and innovator at [Texmith](https://texmith.com).**
 
 Python and technology are my passion. Designing, building, and implementing solutions is something that I have done since my teenage years.
 
@@ -27,7 +29,3 @@ Python and technology are my passion. Designing, building, and implementing solu
 My team and I assisted Intelak, an Emirates company, in redesigning and implementing a B2B focused User interface with a fluid and rich User experience. We have assisted Amazingworkplaces, an initiative by BrandRecall, during the early days of launch with their marketing and web-based platform.
 
 For many years now, we have designed and implemented solutions ranging from a simple Website to High Complexity Systems like a CRM, and E-commerce Web App built complete IT ecosystems on AWS, Heroku, etc.
-
-Currently, we are working to bring an Email Marketing tool into the market. A simple tool to help assist in your daily needs of email marketing, lead generation, customer engagement, and much more all under a simple and easy to use Interface.
-
-**Check out [Texmith](https://texmith.com)**
