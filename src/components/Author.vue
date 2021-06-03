@@ -27,35 +27,46 @@
         <span>
           <h1 class="is-family-monospace is-size-1">Namaste</h1>
         </span>
-        <span class="py-2 is-vcentered animate__animated animate__bounce animate__delay-1s">
-          <g-image src="https://img.icons8.com/color/96/000000/pray.png" width="75" height="75" />
+        <span
+          class="py-2 is-vcentered animate__animated animate__bounce animate__delay-1s"
+        >
+          <g-image
+            src="https://img.icons8.com/color/96/000000/pray.png"
+            width="75"
+            height="75"
+          />
         </span>
       </div>
-      <hr style="background-color: #000;" />
+      <hr style="background-color: #000" />
       <div class="is-flex has-background-black">
         <h2
           class="is-family-monospace is-size-1 has-text-white"
-          style="margin: auto auto auto 0px;"
-        >I'm Kiran Capoor</h2>
+          style="margin: auto auto auto 0px"
+        >
+          I'm Kiran Capoor
+        </h2>
       </div>
-      <hr style="background-color: #000;" />
+      <hr style="background-color: #000" />
       <div>
         <h3 class="is-family-monospace is-size-3">Full Stack Developer</h3>
       </div>
-      <hr style="background-color: #000;" />
+      <hr style="background-color: #000" />
       <div>
         <b-button
+          icon-left="fas fa-smile-beam"
           tag="a"
           href="mailto:kiran.capoor94@gmail.com"
           type="is-dark"
           class="mx-1"
-        >Hire Me?</b-button>
+          >Ask Me Anything</b-button
+        >
         <b-button
           tag="a"
           href="https://www.linkedin.com/in/kiran-capoor/"
           type="is-info"
           class="mx-1"
-        >LinkedIn</b-button>
+          >LinkedIn</b-button
+        >
       </div>
     </div>
   </div>

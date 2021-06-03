@@ -4,37 +4,59 @@
     <nav class="level">
       <!-- Left side -->
       <div class="level-left">
-        <div class="level-item">
-          <span class="footer__copyright">Copyright © {{ new Date().getFullYear() }} | Kiran Capoor</span>
+        <div class="column">
+          <span class="footer__copyright"
+            >Copyright © {{ new Date().getFullYear() }} | Kiran Capoor</span
+          >
         </div>
       </div>
 
       <!-- Right side -->
-      <div class="level-right px-3">
-        <p class="level-item">
+      <div class="columns is-mobile">
+        <p class="column">
           <b-button
             tag="a"
             type="is-primary is-small"
             class="mx-1"
             href="https://gridsome.org"
-          >Gridsome</b-button>
+            >Gridsome</b-button
+          >
         </p>
-        <p class="level-item">
-          <b-button tag="a" type="is-primary is-small" class="mx-1" href="https://vuejs.org/">VueJS</b-button>
+        <p class="column">
+          <b-button
+            tag="a"
+            type="is-primary is-small"
+            class="mx-1"
+            href="https://vuejs.org/"
+            >VueJS</b-button
+          >
         </p>
-        <p class="level-item">
-          <b-button tag="a" type="is-primary is-small" class="mx-1" href="https://buefy.org/">Buefy</b-button>
+        <p class="column">
+          <b-button
+            tag="a"
+            type="is-primary is-small"
+            class="mx-1"
+            href="https://buefy.org/"
+            >Buefy</b-button
+          >
         </p>
-        <p class="level-item">
+        <p class="column">
           <b-button
             tag="a"
             type="is-primary is-small"
             class="mx-1"
             href="https://bulma.io/"
-          >Bulma CSS</b-button>
+            >Bulma CSS</b-button
+          >
         </p>
-        <p class="level-item">
-          <b-button tag="a" type="is-primary is-small" class="mx-1" href="https://icons8.com">Icons8</b-button>
+        <p class="column">
+          <b-button
+            tag="a"
+            type="is-primary is-small"
+            class="mx-1"
+            href="https://icons8.com"
+            >Icons8</b-button
+          >
         </p>
       </div>
     </nav>

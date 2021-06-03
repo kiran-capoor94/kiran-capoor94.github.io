@@ -52,7 +52,6 @@
                 finished its first 100 projects in a span of three years, by 2020 and looks to deliver many-more under
                 the leadership of this young, dynamic, and jovial leader.
               </p>
-              <hr style="background-color: #e5e5e5;" />
             </div>
           </div>
         </div>
