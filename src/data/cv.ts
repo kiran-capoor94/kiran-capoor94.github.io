@@ -125,6 +125,7 @@ export const projects: Project[] = [
     name: 'Wizard',
     description:
       'Persistent memory layer for AI coding agents. Exposes 17 MCP tools via FastMCP, uses SQLite for storage, LiteLLM for transcript synthesis, and a custom compact format (TOON) that cuts token usage by ~40% vs JSON. Ships with session continuity, work triage scoring, PII scrubbing, and optional Notion/Obsidian write-back. Python 3.14+.',
+    link: 'https://github.com/kiran-capoor94/wizard',
   },
   {
     name: 'Wand.nvim',
@@ -135,11 +136,13 @@ export const projects: Project[] = [
     name: 'Ritual',
     description:
       'Chezmoi-managed dotfiles for a CachyOS/Arch development machine with a Tailscale bridge to a Mac. One-command bootstrap via curl. Sets up SSH multi-account config, SSHFS mount, clipboard bridge, Fish + nvm, and a custom Neovim config. Drift detection and per-machine templating via Go templates.',
+    link: 'https://github.com/kiran-capoor94/ritual',
   },
   {
     name: 'RAG Agentic Code Analysis',
     description:
       'Multi-agent RAG system for querying codebases. AST-based parsing for Python and JavaScript, ChromaDB for vector storage, LangChain for agent orchestration, and Streamlit for the UI. Tracks response latency, token usage, and confidence scores per session.',
+    link: 'https://github.com/kiran-capoor94/sws_rag',
   },
   {
     name: 'Texmail',
@@ -149,6 +152,7 @@ export const projects: Project[] = [
     name: 'Ctrl Alt Tech',
     description:
       'YouTube channel about senior software engineering, tooling, and how I actually work. Built a few mini games in Godot/GDScript on the side.',
+    link: 'https://www.youtube.com/@CtrlAltTechWithKiran',
   },
 ];
 

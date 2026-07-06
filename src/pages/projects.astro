@@ -17,7 +17,7 @@ import { projects } from '../data/cv';
             <p>{project.description}</p>
             {project.link && (
               <a href={project.link} target="_blank" rel="noopener noreferrer">
-                cd {project.name.toLowerCase()}/ &rarr;
+                open {project.link.includes('youtube.com') ? '--youtube' : '--github'} &rarr;
               </a>
             )}
           </article>
