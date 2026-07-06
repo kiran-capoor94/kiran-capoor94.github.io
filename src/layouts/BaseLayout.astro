@@ -52,6 +52,8 @@ const currentPath = Astro.url.pathname;
             navItems.map((item) => (
               <a
                 href={item.href}
+                data-key={item.key}
+                title={`press ${item.key} to jump here`}
                 class:list={['tab', { active: currentPath === item.href }]}
               >
                 <span class="tab-key">{item.key}</span>
@@ -85,6 +87,34 @@ const currentPath = Astro.url.pathname;
         const expanded = toggle.getAttribute('aria-expanded') === 'true';
         toggle.setAttribute('aria-expanded', String(!expanded));
         nav?.classList.toggle('open');
+      });
+
+      // keyboard nav: the 1/2/3/4 badges next to each tab are real shortcuts
+      const keyMap = new Map<string, string>();
+      nav?.querySelectorAll<HTMLAnchorElement>('a[data-key]').forEach((link) => {
+        const key = link.dataset.key;
+        if (key) keyMap.set(key, link.href);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+        const target = event.target as HTMLElement | null;
+        const isTyping =
+          target &&
+          (target.tagName === 'INPUT' ||
+            target.tagName === 'TEXTAREA' ||
+            target.isContentEditable);
+        if (isTyping) return;
+
+        if (event.key === 'Escape' && nav?.classList.contains('open')) {
+          nav.classList.remove('open');
+          toggle?.setAttribute('aria-expanded', 'false');
+          return;
+        }
+
+        const href = keyMap.get(event.key);
+        if (href) window.location.href = href;
       });
     </script>
 
