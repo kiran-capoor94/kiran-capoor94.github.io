@@ -131,6 +131,7 @@ export const projects: Project[] = [
     name: 'Wand.nvim',
     description:
       'Custom Neovim distribution built in Lua. Targets sub-100ms boot, manages the full LSP/formatter/linter toolchain via Mason, and includes a handbuilt Pomodoro system with forced break overlays and challenge phrases. First-class support for Python, TypeScript, Go, Rust, SQL, and more. Includes DAP, neotest, Telescope, AI prompt modules, and Jupyter/Molten for notebook workflows.',
+    link: 'https://github.com/buildWithAlchemist/wand',
   },
   {
     name: 'Ritual',
