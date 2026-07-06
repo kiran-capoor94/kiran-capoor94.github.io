@@ -1,35 +1,79 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile, experience, skills, education, certifications } from '../data/cv';
+
+function pseudoHash(input: string): string {
+  let h = 0;
+  for (let i = 0; i < input.length; i++) {
+    h = (h * 31 + input.charCodeAt(i)) >>> 0;
+  }
+  return h.toString(16).padStart(7, '0').slice(0, 7);
+}
+
+function slugify(input: string): string {
+  return input.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+const startYear = 2017;
+const yearsExperience = new Date().getFullYear() - startYear;
+const roleCount = experience.length;
 ---
 
 <BaseLayout title="About" description={profile.summary[0]}>
   <div class="container page">
-    <p class="prompt-line"><span class="prompt">cat about.md</span></p>
+    <p class="prompt-line"><span class="prompt">man kiran</span></p>
     <h1><span class="hash">#</span> about</h1>
 
-    <section class="block">
-      {profile.summary.map((paragraph) => <p>{paragraph}</p>)}
+    <section class="block" data-reveal>
+      <dl class="man-block">
+        <div class="man-row">
+          <dt>NAME</dt>
+          <dd>{profile.name} &mdash; {profile.role}, professional problem-fixer</dd>
+        </div>
+        <div class="man-row">
+          <dt>SYNOPSIS</dt>
+          <dd>
+            <code>kiran --role senior-swe --stack polyglot --location mumbai --status building-something</code>
+          </dd>
+        </div>
+        <div class="man-row">
+          <dt>STATS</dt>
+          <dd>{yearsExperience}+ yrs &middot; {roleCount} roles &middot; 1 chemistry degree &middot; 0 regrets (mostly)</dd>
+        </div>
+        <div class="man-row">
+          <dt>DESCRIPTION</dt>
+          <dd>
+            {profile.summary.map((paragraph) => <p>{paragraph}</p>)}
+          </dd>
+        </div>
+      </dl>
     </section>
 
     <section class="block" data-reveal>
       <h2><span class="hash">##</span> experience</h2>
-      <p class="section-tagline muted">// the paid version of side projects, in reverse-chronological order.</p>
-      <div class="timeline">
+      <p class="section-tagline muted">// the paid version of side projects. click a commit to expand it.</p>
+      <div class="git-log">
         {
-          experience.map((job) => (
-            <article class="job">
-              <div class="job-head">
-                <h3>{job.role} <span class="at">@</span> {job.company}</h3>
+          experience.map((job, index) => (
+            <details class="commit" open={index === 0}>
+              <summary>
+                <span class="graph">&bull;</span>
+                <span class="commit-hash">{pseudoHash(job.role + job.company + job.period)}</span>
+                <span class="commit-msg">
+                  {job.role} <span class="at">@</span> {job.company}
+                </span>
                 <span class="period">{job.period}</span>
+                <span class="toggle" aria-hidden="true" />
+              </summary>
+              <div class="commit-body">
+                <p class="company">// {job.location}</p>
+                <ul>
+                  {job.points.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
               </div>
-              <p class="company">// {job.location}</p>
-              <ul>
-                {job.points.map((point) => (
-                  <li>{point}</li>
-                ))}
-              </ul>
-            </article>
+            </details>
           ))
         }
       </div>
@@ -38,12 +82,14 @@ import { profile, experience, skills, education, certifications } from '../data/
     <section class="block" data-reveal>
       <h2><span class="hash">##</span> skills</h2>
       <p class="section-tagline muted">// what shows up in `git blame` most often.</p>
-      <div class="skill-grid">
+      <div class="skill-groups">
         {
           skills.map((group) => (
             <div class="skill-group">
-              <h3>{group.group}</h3>
-              <div>
+              <p class="pkg-cmd">
+                <span class="prompt-symbol">$</span> install --{slugify(group.group)}
+              </p>
+              <div class="pkg-list">
                 {group.items.map((item) => (
                   <span class="tag-pill">{item}</span>
                 ))}
@@ -112,22 +158,93 @@ import { profile, experience, skills, education, certifications } from '../data/
       font-size: 0.85rem;
     }
 
-    .timeline {
+    /* man-page style header block, shared visual language with Projects page */
+    .man-block {
+      margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1rem;
     }
 
-    .job-head {
+    .man-row {
+      display: grid;
+      grid-template-columns: 7rem 1fr;
+      gap: 0.75rem;
+      align-items: start;
+    }
+
+    .man-row dt {
+      color: var(--color-magenta);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      padding-top: 0.15rem;
+      white-space: nowrap;
+    }
+
+    .man-row dd {
+      margin: 0;
+      color: var(--color-text);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .man-row dd p {
+      margin: 0 0 1rem;
+    }
+
+    .man-row dd p:last-child {
+      margin-bottom: 0;
+    }
+
+    .man-row code {
+      color: var(--color-cyan);
+      background: var(--color-bg-alt);
+      font-size: 0.85rem;
+    }
+
+    /* git-log style expandable timeline */
+    .git-log {
+      position: relative;
+      padding-left: 1.5rem;
+      border-left: 2px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .commit summary {
+      cursor: pointer;
+      list-style: none;
+      position: relative;
       display: flex;
       align-items: baseline;
-      justify-content: space-between;
-      gap: 1rem;
+      gap: 0.6rem;
       flex-wrap: wrap;
     }
 
-    .job h3 {
-      margin: 0;
+    .commit summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .commit summary::marker {
+      content: '';
+    }
+
+    .graph {
+      position: absolute;
+      left: -1.94rem;
+      top: 0.15rem;
+      color: var(--color-green);
+      font-size: 1.1rem;
+    }
+
+    .commit-hash {
+      color: var(--color-text-muted);
+      font-size: 0.82rem;
+    }
+
+    .commit-msg {
       font-size: 1rem;
       color: var(--color-yellow);
     }
@@ -138,36 +255,64 @@ import { profile, experience, skills, education, certifications } from '../data/
       white-space: nowrap;
     }
 
+    .toggle {
+      margin-left: auto;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+    }
+
+    .toggle::before {
+      content: '+';
+    }
+
+    details[open] .toggle::before {
+      content: '\2212';
+    }
+
+    .commit-body {
+      padding: 0.75rem 0 0 1.5rem;
+    }
+
     .company {
-      margin: 0.2rem 0 0.6rem;
+      margin: 0 0 0.6rem;
       color: var(--color-text-muted);
       font-size: 0.88rem;
     }
 
-    .job ul {
+    .commit-body ul {
       margin: 0;
       padding-left: 1.25rem;
     }
 
-    .job li {
+    .commit-body li {
       margin-bottom: 0.35rem;
       font-size: 0.92rem;
     }
 
-    .job li::marker {
+    .commit-body li::marker {
       color: var(--color-green);
     }
 
-    .skill-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    /* skills as package installs */
+    .skill-groups {
+      display: flex;
+      flex-direction: column;
       gap: 1.5rem;
     }
 
-    .skill-group h3 {
+    .pkg-cmd {
+      margin: 0 0 0.6rem;
       font-size: 0.88rem;
-      color: var(--color-text-muted);
-      margin-bottom: 0.6rem;
+      color: var(--color-text);
+    }
+
+    .pkg-cmd .prompt-symbol {
+      color: var(--color-green);
+      margin-right: 0.3rem;
+    }
+
+    .pkg-list {
+      padding-left: 1.2rem;
     }
 
     .cert-list {
