@@ -5,16 +5,38 @@ import { projects } from '../data/cv';
 
 <BaseLayout title="Projects" description="Open source and side projects by Kiran Capoor.">
   <div class="container page">
-    <p class="prompt-line"><span class="prompt">ls -la ~/projects</span></p>
+    <p class="prompt-line"><span class="prompt">man ~/projects/*</span></p>
     <h1><span class="hash">#</span> projects</h1>
-    <p class="intro muted">// open source and side projects — mostly tooling for the way I work.</p>
+    <p class="intro muted">// the tools I built because the existing ones annoyed me enough to fix it myself.</p>
 
     <div class="project-grid">
       {
         projects.map((project) => (
-          <article class="project-card">
+          <article class="project-card" data-reveal>
             <h2><span class="dir-icon">drwxr-xr-x</span> {project.name}/</h2>
-            <p>{project.description}</p>
+            <p class="tagline">{project.tagline}</p>
+
+            <dl class="man-block">
+              <div class="man-row">
+                <dt>WHY</dt>
+                <dd>{project.why}</dd>
+              </div>
+              {project.impact && (
+                <div class="man-row">
+                  <dt>IMPACT</dt>
+                  <dd class="impact">{project.impact}</dd>
+                </div>
+              )}
+              <div class="man-row">
+                <dt>STACK</dt>
+                <dd>
+                  {project.stack.map((tech) => (
+                    <span class="tag-pill">{tech}</span>
+                  ))}
+                </dd>
+              </div>
+            </dl>
+
             {project.link && (
               <a href={project.link} target="_blank" rel="noopener noreferrer">
                 open {project.link.includes('youtube.com') ? '--youtube' : '--github'} &rarr;
@@ -51,7 +73,7 @@ import { projects } from '../data/cv';
 
     .project-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1.5rem;
     }
 
@@ -60,15 +82,17 @@ import { projects } from '../data/cv';
       border-radius: 6px;
       padding: 1.5rem;
       background: var(--color-bg-alt);
+      transition: border-color 0.2s ease, transform 0.2s ease;
     }
 
     .project-card:hover {
       border-color: var(--color-accent);
+      transform: translateY(-2px);
     }
 
     .project-card h2 {
       font-size: 1rem;
-      margin: 0 0 0.6rem;
+      margin: 0 0 0.5rem;
       color: var(--color-yellow);
     }
 
@@ -77,10 +101,48 @@ import { projects } from '../data/cv';
       font-size: 0.75rem;
     }
 
-    .project-card p {
+    .tagline {
+      color: var(--color-text);
+      font-size: 0.92rem;
+      margin: 0 0 1rem;
+      font-style: italic;
+    }
+
+    .man-block {
+      margin: 0 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .man-row {
+      display: grid;
+      grid-template-columns: 4.5rem 1fr;
+      gap: 0.75rem;
+      align-items: start;
+    }
+
+    .man-row dt {
+      color: var(--color-magenta);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      padding-top: 0.1rem;
+    }
+
+    .man-row dd {
+      margin: 0;
       color: var(--color-text-muted);
-      font-size: 0.9rem;
-      margin: 0 0 0.75rem;
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .man-row dd.impact {
+      color: var(--color-green);
+    }
+
+    .project-card a {
+      font-size: 0.88rem;
     }
   </style>
 </BaseLayout>

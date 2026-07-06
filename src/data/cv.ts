@@ -118,43 +118,57 @@ export const skills: { group: string; items: string[] }[] = [
 
 export interface Project {
   name: string;
-  description: string;
+  tagline: string;
+  why: string;
+  impact?: string;
+  stack: string[];
   link?: string;
 }
 
 export const projects: Project[] = [
   {
     name: 'Wizard',
-    description:
-      'Persistent memory layer for AI coding agents. Exposes 17 MCP tools via FastMCP, uses SQLite for storage, LiteLLM for transcript synthesis, and a custom compact format (TOON) that cuts token usage by ~40% vs JSON. Ships with session continuity, work triage scoring, PII scrubbing, and optional Notion/Obsidian write-back. Python 3.14+.',
+    tagline: 'Long-term memory for AI coding agents that keep forgetting everything.',
+    why: "Every new agent session started from zero — same context, re-explained, every single time. I got tired of being the agent's memory, so I built it one instead.",
+    impact: '~40% smaller transcripts than raw JSON, via a custom compact format (TOON)',
+    stack: ['Python 3.14', 'FastMCP', 'SQLite', 'LiteLLM'],
     link: 'https://github.com/kiran-capoor94/wizard',
   },
   {
     name: 'Wand.nvim',
-    description:
-      'Custom Neovim distribution built in Lua. Targets sub-100ms boot, manages the full LSP/formatter/linter toolchain via Mason, and includes a handbuilt Pomodoro system with forced break overlays and challenge phrases. First-class support for Python, TypeScript, Go, Rust, SQL, and more. Includes DAP, neotest, Telescope, AI prompt modules, and Jupyter/Molten for notebook workflows.',
+    tagline: 'A Neovim distribution built for one very specific user: me.',
+    why: "Off-the-shelf configs always fought me on something. Easier to write 5,000 lines of Lua than compromise on my workflow.",
+    impact: 'sub-100ms cold boot, full LSP/DAP/test stack included',
+    stack: ['Lua', 'Neovim', 'Mason', 'Telescope', 'DAP'],
     link: 'https://github.com/buildWithAlchemist/wand',
   },
   {
     name: 'Ritual',
-    description:
-      'Chezmoi-managed dotfiles for a CachyOS/Arch development machine with a Tailscale bridge to a Mac. One-command bootstrap via curl. Sets up SSH multi-account config, SSHFS mount, clipboard bridge, Fish + nvm, and a custom Neovim config. Drift detection and per-machine templating via Go templates.',
+    tagline: "Dotfiles that set up a brand-new machine before your coffee's ready.",
+    why: 'Rebuilding a dev machine from scratch used to eat a weekend. Now it eats one `curl` command.',
+    impact: 'one-command bootstrap, drift-detected, Tailscale-bridged to a Mac',
+    stack: ['Chezmoi', 'Go templates', 'Fish', 'Tailscale'],
     link: 'https://github.com/kiran-capoor94/ritual',
   },
   {
     name: 'RAG Agentic Code Analysis',
-    description:
-      'Multi-agent RAG system for querying codebases. AST-based parsing for Python and JavaScript, ChromaDB for vector storage, LangChain for agent orchestration, and Streamlit for the UI. Tracks response latency, token usage, and confidence scores per session.',
+    tagline: 'Ask a codebase questions instead of grepping it for an hour.',
+    why: 'Wanted to know if multi-agent RAG actually holds up on real code, not toy examples — so I pointed it at real repos and made it show its work.',
+    impact: 'tracks latency, token cost, and confidence per query — no black-box answers',
+    stack: ['LangChain', 'ChromaDB', 'AST parsing', 'Streamlit'],
     link: 'https://github.com/kiran-capoor94/sws_rag',
   },
   {
     name: 'Texmail',
-    description: 'Django application built on Cookiecutter Django with Celery, Docker, Sentry, and Heroku deployment.',
+    tagline: 'A Django billing app that predates my terminal obsession.',
+    why: 'Built during the Texmith years, when "ship it" mattered more than "make it pretty." Still runs.',
+    stack: ['Django', 'Celery', 'Docker', 'Heroku'],
   },
   {
     name: 'Ctrl Alt Tech',
-    description:
-      'YouTube channel about senior software engineering, tooling, and how I actually work. Built a few mini games in Godot/GDScript on the side.',
+    tagline: 'A YouTube channel for the engineering layer nobody puts in the demo.',
+    why: 'The interesting part of senior engineering rarely makes it into tutorials — the tradeoffs, the dead ends, the "why we didn\'t do it that way." So I started filming that part instead.',
+    stack: ['YouTube', 'Godot', 'GDScript'],
     link: 'https://www.youtube.com/@CtrlAltTechWithKiran',
   },
 ];

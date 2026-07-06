@@ -39,6 +39,11 @@ const currentPath = Astro.url.pathname;
     />
   </head>
   <body>
+    <div id="boot-overlay" class="boot-overlay">
+      <div id="boot-lines" class="boot-lines"></div>
+      <p class="boot-skip">press any key or click to skip</p>
+    </div>
+
     <header class="tmux-bar">
       <div class="container tmux-inner">
         <a class="brand" href="/">
@@ -120,7 +125,145 @@ const currentPath = Astro.url.pathname;
       });
     </script>
 
+    <script>
+      // signature moment: a fake boot sequence, once per session, skippable, motion-safe
+      const overlay = document.getElementById('boot-overlay');
+      const linesEl = document.getElementById('boot-lines');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (overlay && linesEl) {
+        if (sessionStorage.getItem('kc_booted') || reduceMotion) {
+          overlay.remove();
+        } else {
+          const bootLines = [
+            '[ OK ] booting kernel...',
+            '[ OK ] mounting /dev/skills...',
+            '[ OK ] starting agent-memory.service...',
+            '[FAIL] coffee not found. continuing anyway.',
+            '[ OK ] loading personality.so...',
+            'welcome. type freely, nothing here bites.',
+          ];
+
+          let cancelled = false;
+          let timeoutId: number | undefined;
+
+          const finishBoot = () => {
+            sessionStorage.setItem('kc_booted', '1');
+            overlay.classList.add('boot-hide');
+            window.setTimeout(() => overlay.remove(), 300);
+          };
+
+          const skip = () => {
+            if (cancelled) return;
+            cancelled = true;
+            window.clearTimeout(timeoutId);
+            finishBoot();
+          };
+
+          const typeLine = (lineIndex: number) => {
+            if (cancelled) return;
+            if (lineIndex >= bootLines.length) {
+              timeoutId = window.setTimeout(finishBoot, 500);
+              return;
+            }
+            const line = bootLines[lineIndex];
+            const p = document.createElement('p');
+            linesEl.appendChild(p);
+            let charIndex = 0;
+            const typeChar = () => {
+              if (cancelled) return;
+              if (charIndex <= line.length) {
+                p.textContent = line.slice(0, charIndex);
+                charIndex++;
+                timeoutId = window.setTimeout(typeChar, 14);
+              } else {
+                if (line.startsWith('[FAIL]')) p.classList.add('boot-fail');
+                else if (line.startsWith('[ OK ]')) p.classList.add('boot-ok');
+                timeoutId = window.setTimeout(() => typeLine(lineIndex + 1), 140);
+              }
+            };
+            typeChar();
+          };
+
+          overlay.addEventListener('click', skip);
+          document.addEventListener('keydown', skip, { once: true });
+          typeLine(0);
+        }
+      }
+    </script>
+
+    <script>
+      // scroll-reveal: fade+rise elements marked data-reveal as they enter the viewport
+      const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const reduceMotionReveal = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (revealEls.length) {
+        if (reduceMotionReveal || !('IntersectionObserver' in window)) {
+          revealEls.forEach((el) => el.classList.add('is-visible'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('is-visible');
+                  io.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+          );
+          revealEls.forEach((el) => io.observe(el));
+        }
+      }
+    </script>
+
     <style>
+      .boot-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: var(--color-bg);
+        color: var(--color-text);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 2rem;
+        cursor: pointer;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+
+      .boot-overlay.boot-hide {
+        opacity: 0;
+      }
+
+      .boot-lines {
+        max-width: 640px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .boot-lines p {
+        margin: 0.35rem 0;
+        min-height: 1.2em;
+      }
+
+      .boot-lines p.boot-ok {
+        color: var(--color-green);
+      }
+
+      .boot-lines p.boot-fail {
+        color: var(--color-red);
+      }
+
+      .boot-skip {
+        max-width: 640px;
+        margin: 1.5rem auto 0;
+        width: 100%;
+        color: var(--color-text-muted);
+        font-size: 0.82rem;
+      }
+
       .tmux-bar {
         border-bottom: 1px solid var(--color-border);
         position: sticky;

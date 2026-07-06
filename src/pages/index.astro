@@ -8,6 +8,8 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .slice(0, 3);
 
 const highlightProjects = projects.slice(0, 3);
+const pitch =
+  "8+ years turning \"it works on my machine\" into things that survive production. Backend, platform, AI tooling — I go wherever the interesting problem is.";
 ---
 
 <BaseLayout title="Home">
@@ -21,11 +23,11 @@ const highlightProjects = projects.slice(0, 3);
       </div>
       <div class="term-body">
         <p class="line"><span class="prompt">whoami</span></p>
-        <p class="output name">{profile.name}</p>
+        <p class="output name" id="tw-name">{profile.name}</p>
         <p class="line"><span class="prompt">cat role.txt</span></p>
-        <p class="output">{profile.role} &middot; {profile.location}</p>
+        <p class="output" id="tw-role">{profile.role} &middot; {profile.location}</p>
         <p class="line"><span class="prompt">cat pitch.txt</span></p>
-        <p class="output pitch">{profile.tagline}</p>
+        <p class="output pitch" id="tw-pitch">{pitch}</p>
         <div id="term-log" aria-live="polite"></div>
         <p class="line prompt-line">
           <label for="term-input" class="visually-hidden">Terminal command input — type help and press enter</label>
@@ -56,6 +58,10 @@ const highlightProjects = projects.slice(0, 3);
       github: profile.github,
       linkedin: profile.linkedin,
       youtube: profile.youtube,
+      name: profile.name,
+      role: profile.role,
+      location: profile.location,
+      pitch,
     }}
   >
     (function () {
@@ -95,17 +101,28 @@ const highlightProjects = projects.slice(0, 3);
         window.open(url, '_blank', 'noopener,noreferrer');
       }
 
+      const FORTUNES = [
+        'there are two hard problems in computer science: cache invalidation, naming things, and off-by-one errors.',
+        'it works on my machine is not a deployment strategy, but it is a personality trait.',
+        '99 little bugs in the code, 99 little bugs. take one down, patch it around, 127 little bugs in the code.',
+        'the best code is no code. the second best code has tests.',
+        "a senior engineer's superpower is knowing which fires to ignore.",
+      ];
+
       const HELP =
         'available commands:<br>' +
         '&nbsp;&nbsp;help &mdash; show this list<br>' +
-        '&nbsp;&nbsp;about, whoami &mdash; open the CV page<br>' +
+        '&nbsp;&nbsp;about, whoami, cv &mdash; open the CV page<br>' +
         '&nbsp;&nbsp;projects, ls &mdash; open the projects page<br>' +
         '&nbsp;&nbsp;blog &mdash; open the blog<br>' +
-        '&nbsp;&nbsp;contact, mail &mdash; email me<br>' +
+        '&nbsp;&nbsp;contact, mail, hire &mdash; email me<br>' +
         '&nbsp;&nbsp;github, linkedin, youtube &mdash; open my profiles<br>' +
+        '&nbsp;&nbsp;fortune &mdash; a random engineering one-liner<br>' +
         '&nbsp;&nbsp;date &mdash; current date/time<br>' +
         '&nbsp;&nbsp;echo &lt;text&gt; &mdash; print text back<br>' +
-        '&nbsp;&nbsp;clear &mdash; clear the screen';
+        '&nbsp;&nbsp;reboot &mdash; replay the boot sequence<br>' +
+        '&nbsp;&nbsp;clear &mdash; clear the screen<br>' +
+        '&nbsp;&nbsp;&uarr; / &darr; &mdash; cycle command history';
 
       function run(raw) {
         const cmd = raw.trim();
@@ -115,6 +132,12 @@ const highlightProjects = projects.slice(0, 3);
         const [word, ...rest] = cmd.split(/\s+/);
         const arg = rest.join(' ');
         const lower = word.toLowerCase();
+        const lowerFull = cmd.toLowerCase();
+
+        if (lowerFull.includes('rm') && lowerFull.includes('-rf')) {
+          appendOutput("nice try. this terminal is read-only and so is your access to my filesystem.");
+          return;
+        }
 
         switch (lower) {
           case 'help':
@@ -122,6 +145,7 @@ const highlightProjects = projects.slice(0, 3);
             break;
           case 'about':
           case 'whoami':
+          case 'cv':
             goTo('/about/', 'opening about page...');
             break;
           case 'projects':
@@ -135,6 +159,11 @@ const highlightProjects = projects.slice(0, 3);
           case 'mail':
             openExternal('mailto:' + email, 'opening mail client...');
             break;
+          case 'hire':
+          case 'hireme':
+            appendOutput("good instinct. opening a blank email &mdash; sell me on the role.");
+            openExternal('mailto:' + email + '?subject=Let%27s%20talk', 'opening mail client...');
+            break;
           case 'github':
             openExternal(github, 'opening github...');
             break;
@@ -144,11 +173,20 @@ const highlightProjects = projects.slice(0, 3);
           case 'youtube':
             openExternal(youtube, 'opening youtube...');
             break;
+          case 'fortune':
+            appendOutput(FORTUNES[Math.floor(Math.random() * FORTUNES.length)]);
+            break;
           case 'date':
             appendOutput(new Date().toString());
             break;
           case 'echo':
             appendOutput(escapeHtml(arg));
+            break;
+          case 'reboot':
+            sessionStorage.removeItem('kc_booted');
+            sessionStorage.removeItem('kc_home_intro_played');
+            appendOutput('rebooting...');
+            window.setTimeout(() => window.location.reload(), 300);
             break;
           case 'clear':
           case 'cls':
@@ -162,42 +200,90 @@ const highlightProjects = projects.slice(0, 3);
         }
       }
 
+      const history = [];
+      let historyIndex = -1;
+
       input.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
-          run(input.value);
+          const value = input.value;
+          if (value.trim()) {
+            history.push(value);
+            historyIndex = history.length;
+          }
+          run(value);
           input.value = '';
+        } else if (event.key === 'ArrowUp') {
+          if (history.length === 0) return;
+          event.preventDefault();
+          historyIndex = Math.max(0, historyIndex - 1);
+          input.value = history[historyIndex] ?? '';
+        } else if (event.key === 'ArrowDown') {
+          if (history.length === 0) return;
+          event.preventDefault();
+          historyIndex = Math.min(history.length, historyIndex + 1);
+          input.value = history[historyIndex] ?? '';
         }
       });
 
       document.querySelector('.term-window')?.addEventListener('click', () => input.focus());
+
+      // typewriter intro: only on the first Home visit of a session, so repeat viewers get instant text
+      const targets = [
+        { el: document.getElementById('tw-name'), text: name },
+        { el: document.getElementById('tw-role'), text: role + ' · ' + location },
+        { el: document.getElementById('tw-pitch'), text: pitch },
+      ];
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const alreadyPlayed = sessionStorage.getItem('kc_home_intro_played');
+
+      if (!reduceMotion && !alreadyPlayed) {
+        sessionStorage.setItem('kc_home_intro_played', '1');
+        targets.forEach(({ el }) => {
+          if (el) el.textContent = '';
+        });
+
+        let t = 0;
+        targets.forEach(({ el, text }) => {
+          if (!el) return;
+          for (let i = 0; i <= text.length; i++) {
+            window.setTimeout(() => {
+              el.textContent = text.slice(0, i);
+            }, t);
+            t += 10;
+          }
+          t += 200;
+        });
+      }
     })();
   </script>
 
-  <section class="container section">
+  <section class="container section" data-reveal>
     <div class="section-head">
       <h2><span class="hash">#</span> side_projects</h2>
       <a href="/projects/">ls -la &rarr;</a>
     </div>
+    <p class="section-tagline muted">// built because the existing tool annoyed me enough to fix it myself.</p>
     <div class="card-grid">
       {
         highlightProjects.map((project) => (
           <div class="card">
             <h3><span class="dir-icon">/</span>{project.name}</h3>
-            <p>{project.description}</p>
+            <p>{project.tagline}</p>
           </div>
         ))
       }
     </div>
   </section>
 
-  <section class="container section">
+  <section class="container section" data-reveal>
     <div class="section-head">
       <h2><span class="hash">#</span> latest_writing</h2>
       <a href="/blog/">tail -f &rarr;</a>
     </div>
+    <p class="section-tagline muted">// long-form notes on AI tooling, agent memory, and why your dotfiles are probably fine.</p>
     {
       posts.length === 0 ? (
-        <p class="muted">// no posts yet — first one is coming soon.</p>
+        <p class="muted">// nothing published yet — the backlog is real, the excuses are worse.</p>
       ) : (
         <ul class="post-list">
           {posts.map((post) => (
@@ -227,6 +313,7 @@ const highlightProjects = projects.slice(0, 3);
     .output {
       margin: 0 0 0.2rem;
       color: var(--color-text);
+      min-height: 1.4em;
     }
 
     .output.name {
@@ -334,13 +421,18 @@ const highlightProjects = projects.slice(0, 3);
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.4rem;
     }
 
     .section-head h2 {
       font-size: 1.15rem;
       margin: 0;
       color: var(--color-text);
+    }
+
+    .section-tagline {
+      margin: 0 0 1.25rem;
+      font-size: 0.88rem;
     }
 
     .hash {
@@ -358,10 +450,12 @@ const highlightProjects = projects.slice(0, 3);
       border-radius: 6px;
       padding: 1.25rem;
       background: var(--color-bg-alt);
+      transition: border-color 0.2s ease, transform 0.2s ease;
     }
 
     .card:hover {
       border-color: var(--color-accent);
+      transform: translateY(-2px);
     }
 
     .card h3 {

@@ -14,8 +14,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="term-body">
         <p><span class="prompt">{Astro.url.pathname}</span></p>
         <p class="error">zsh: command not found: {Astro.url.pathname}</p>
-        <p class="muted">// that page doesn't exist.</p>
-        <p><a href="/">cd ~</a></p>
+        <p class="muted">// this route never shipped. probably a typo, possibly a feature I haven't built yet.</p>
+        <p><a href="/">cd ~</a> <span class="muted">// the only path guaranteed to exist</span></p>
       </div>
     </div>
   </div>
