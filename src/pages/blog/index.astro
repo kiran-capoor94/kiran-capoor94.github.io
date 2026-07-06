@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="Blog" description="Writing on software engineering, AI tooling, and how I work.">
+  <div class="container page">
+    <p class="prompt-line"><span class="prompt">git log --oneline blog/</span></p>
+    <h1><span class="hash">#</span> blog</h1>
+
+    {
+      posts.length === 0 ? (
+        <div class="empty">
+          <p>// nothing published yet.</p>
+          <p class="muted">
+            <span class="prompt">subscribe</span> via <a href="/rss.xml">rss</a> and check back soon.
+          </p>
+        </div>
+      ) : (
+        <ul class="post-list">
+          {posts.map((post) => (
+            <li>
+              <a class="post-title" href={`/blog/${post.slug}/`}>
+                {post.data.title}
+              </a>
+              <p class="post-meta">
+                {post.data.pubDate.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </p>
+              <p class="post-desc">{post.data.description}</p>
+              {post.data.tags.length > 0 && (
+                <div>
+                  {post.data.tags.map((tag) => (
+                    <span class="tag-pill">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+
+  <style>
+    .page {
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .prompt-line {
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin: 0 0 2rem;
+      color: var(--color-cyan);
+    }
+
+    .hash {
+      color: var(--color-magenta);
+    }
+
+    .empty {
+      border: 1px dashed var(--color-border);
+      border-radius: 6px;
+      padding: 2.5rem;
+      text-align: center;
+      background: var(--color-bg-alt);
+    }
+
+    .muted {
+      color: var(--color-text-muted);
+    }
+
+    .post-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .post-list li {
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 1.5rem;
+    }
+
+    .post-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-yellow);
+    }
+
+    .post-title:hover {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    .post-meta {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin: 0.3rem 0 0.6rem;
+    }
+
+    .post-desc {
+      margin: 0 0 0.6rem;
+      color: var(--color-text-muted);
+    }
+  </style>
+</BaseLayout>

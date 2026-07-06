@@ -1,0 +1,228 @@
+---
+import '../styles/global.css';
+import { profile } from '../data/cv';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = profile.tagline } = Astro.props;
+const navItems = [
+  { href: '/', label: 'home', key: '1' },
+  { href: '/about/', label: 'about', key: '2' },
+  { href: '/projects/', label: 'projects', key: '3' },
+  { href: '/blog/', label: 'blog', key: '4' },
+];
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={profile.name} href="/rss.xml" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} · {profile.name}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="tmux-bar">
+      <div class="container tmux-inner">
+        <a class="brand" href="/">
+          <span class="prompt-icon">&gt;</span> kiran@portfolio
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" id="nav-toggle">
+          <span></span><span></span><span></span>
+        </button>
+        <nav id="site-nav">
+          {
+            navItems.map((item) => (
+              <a
+                href={item.href}
+                class:list={['tab', { active: currentPath === item.href }]}
+              >
+                <span class="tab-key">{item.key}</span>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>&copy; {new Date().getFullYear()} {profile.name} <span class="muted">// built with astro</span></span>
+        <div class="footer-links">
+          <a href={`mailto:${profile.email}`}>email</a>
+          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">linkedin</a>
+          <a href="/rss.xml">rss</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.getElementById('nav-toggle');
+      const nav = document.getElementById('site-nav');
+      toggle?.addEventListener('click', () => {
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        nav?.classList.toggle('open');
+      });
+    </script>
+
+    <style>
+      .tmux-bar {
+        border-bottom: 1px solid var(--color-border);
+        position: sticky;
+        top: 0;
+        background: var(--color-bg-alt);
+        z-index: 10;
+      }
+
+      .tmux-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 52px;
+      }
+
+      .brand {
+        font-weight: 600;
+        color: var(--color-text);
+        font-size: 0.95rem;
+      }
+
+      .brand:hover {
+        color: var(--color-green);
+        text-decoration: none;
+      }
+
+      .prompt-icon {
+        color: var(--color-green);
+      }
+
+      #site-nav {
+        display: flex;
+        gap: 0.25rem;
+      }
+
+      .tab {
+        color: var(--color-text-muted);
+        font-size: 0.88rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 4px;
+        border: 1px solid transparent;
+      }
+
+      .tab-key {
+        color: var(--color-magenta);
+        margin-right: 0.35rem;
+      }
+
+      .tab:hover {
+        color: var(--color-text);
+        border-color: var(--color-border);
+        text-decoration: none;
+      }
+
+      .tab.active {
+        color: var(--color-bg);
+        background: var(--color-accent);
+        text-decoration: none;
+      }
+
+      .tab.active .tab-key {
+        color: var(--color-bg);
+        opacity: 0.7;
+      }
+
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+      }
+
+      .nav-toggle span {
+        width: 22px;
+        height: 2px;
+        background: var(--color-text);
+        display: block;
+      }
+
+      main {
+        min-height: calc(100vh - 52px - 90px);
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--color-border);
+        margin-top: 4rem;
+        background: var(--color-bg-alt);
+      }
+
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem;
+        color: var(--color-text-muted);
+        font-size: 0.85rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 1.25rem;
+      }
+
+      @media (max-width: 640px) {
+        .nav-toggle {
+          display: flex;
+        }
+
+        #site-nav {
+          display: none;
+          position: absolute;
+          top: 52px;
+          left: 0;
+          right: 0;
+          background: var(--color-bg-alt);
+          border-bottom: 1px solid var(--color-border);
+          flex-direction: column;
+          gap: 0;
+          padding: 0.5rem;
+        }
+
+        #site-nav.open {
+          display: flex;
+        }
+
+        .tab {
+          padding: 0.75rem 1rem;
+        }
+      }
+    </style>
+  </body>
+</html>
