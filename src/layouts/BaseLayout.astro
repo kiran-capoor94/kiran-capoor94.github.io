@@ -74,7 +74,9 @@ const currentPath = Astro.url.pathname;
         <span>&copy; {new Date().getFullYear()} {profile.name} <span class="muted">// built with astro</span></span>
         <div class="footer-links">
           <a href={`mailto:${profile.email}`}>email</a>
+          <a href={profile.github} target="_blank" rel="noopener noreferrer">github</a>
           <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">linkedin</a>
+          <a href={profile.youtube} target="_blank" rel="noopener noreferrer">youtube</a>
           <a href="/rss.xml">rss</a>
         </div>
       </div>

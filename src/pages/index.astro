@@ -26,7 +26,21 @@ const highlightProjects = projects.slice(0, 3);
         <p class="output">{profile.role} &middot; {profile.location}</p>
         <p class="line"><span class="prompt">cat pitch.txt</span></p>
         <p class="output pitch">{profile.tagline}</p>
-        <p class="line"><span class="prompt">ls contact/</span><span class="cursor blink">&#9608;</span></p>
+        <div id="term-log" aria-live="polite"></div>
+        <p class="line prompt-line">
+          <label for="term-input" class="visually-hidden">Terminal command input — type help and press enter</label>
+          <span class="prompt-symbol">$</span>
+          <input
+            id="term-input"
+            class="term-input"
+            type="text"
+            autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+            placeholder="type 'help' and press enter"
+          />
+        </p>
         <div class="cta-row">
           <a class="button primary" href="/about/">./view-cv.sh</a>
           <a class="button" href={`mailto:${profile.email}`}>mailto:kiran</a>
@@ -35,6 +49,129 @@ const highlightProjects = projects.slice(0, 3);
       </div>
     </div>
   </section>
+
+  <script
+    define:vars={{
+      email: profile.email,
+      github: profile.github,
+      linkedin: profile.linkedin,
+      youtube: profile.youtube,
+    }}
+  >
+    (function () {
+      const input = document.getElementById('term-input');
+      const log = document.getElementById('term-log');
+      if (!input || !log) return;
+
+      function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      function appendCommand(cmd) {
+        const p = document.createElement('p');
+        p.className = 'line';
+        p.innerHTML = '<span class="prompt">' + escapeHtml(cmd) + '</span>';
+        log.appendChild(p);
+      }
+
+      function appendOutput(html) {
+        const p = document.createElement('p');
+        p.className = 'output';
+        p.innerHTML = html;
+        log.appendChild(p);
+      }
+
+      function goTo(path, label) {
+        appendOutput('&rarr; ' + label);
+        window.setTimeout(() => {
+          window.location.href = path;
+        }, 350);
+      }
+
+      function openExternal(url, label) {
+        appendOutput('&rarr; ' + label);
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+
+      const HELP =
+        'available commands:<br>' +
+        '&nbsp;&nbsp;help &mdash; show this list<br>' +
+        '&nbsp;&nbsp;about, whoami &mdash; open the CV page<br>' +
+        '&nbsp;&nbsp;projects, ls &mdash; open the projects page<br>' +
+        '&nbsp;&nbsp;blog &mdash; open the blog<br>' +
+        '&nbsp;&nbsp;contact, mail &mdash; email me<br>' +
+        '&nbsp;&nbsp;github, linkedin, youtube &mdash; open my profiles<br>' +
+        '&nbsp;&nbsp;date &mdash; current date/time<br>' +
+        '&nbsp;&nbsp;echo &lt;text&gt; &mdash; print text back<br>' +
+        '&nbsp;&nbsp;clear &mdash; clear the screen';
+
+      function run(raw) {
+        const cmd = raw.trim();
+        appendCommand(cmd);
+        if (!cmd) return;
+
+        const [word, ...rest] = cmd.split(/\s+/);
+        const arg = rest.join(' ');
+        const lower = word.toLowerCase();
+
+        switch (lower) {
+          case 'help':
+            appendOutput(HELP);
+            break;
+          case 'about':
+          case 'whoami':
+            goTo('/about/', 'opening about page...');
+            break;
+          case 'projects':
+          case 'ls':
+            goTo('/projects/', 'opening projects page...');
+            break;
+          case 'blog':
+            goTo('/blog/', 'opening blog...');
+            break;
+          case 'contact':
+          case 'mail':
+            openExternal('mailto:' + email, 'opening mail client...');
+            break;
+          case 'github':
+            openExternal(github, 'opening github...');
+            break;
+          case 'linkedin':
+            openExternal(linkedin, 'opening linkedin...');
+            break;
+          case 'youtube':
+            openExternal(youtube, 'opening youtube...');
+            break;
+          case 'date':
+            appendOutput(new Date().toString());
+            break;
+          case 'echo':
+            appendOutput(escapeHtml(arg));
+            break;
+          case 'clear':
+          case 'cls':
+            log.innerHTML = '';
+            break;
+          case 'sudo':
+            appendOutput("kiran is not in the sudoers file. this incident will be reported. (jk &mdash; try 'help')");
+            break;
+          default:
+            appendOutput('command not found: ' + escapeHtml(word) + " &mdash; try 'help'");
+        }
+      }
+
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          run(input.value);
+          input.value = '';
+        }
+      });
+
+      document.querySelector('.term-window')?.addEventListener('click', () => input.focus());
+    })();
+  </script>
 
   <section class="container section">
     <div class="section-head">
@@ -106,6 +243,52 @@ const highlightProjects = projects.slice(0, 3);
     .cursor {
       margin-left: 0.35rem;
       color: var(--color-green);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #term-log :global(.line) {
+      margin: 1.1rem 0 0.2rem;
+    }
+
+    #term-log :global(.output) {
+      margin: 0 0 0.2rem;
+      color: var(--color-text);
+    }
+
+    .prompt-line {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 1.1rem 0 0.2rem;
+    }
+
+    .prompt-symbol {
+      color: var(--color-green);
+    }
+
+    .term-input {
+      all: unset;
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: inherit;
+      color: var(--color-text);
+      caret-color: var(--color-green);
+      min-width: 0;
+    }
+
+    .term-input::placeholder {
+      color: var(--color-text-muted);
     }
 
     .cta-row {

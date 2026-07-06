@@ -5,6 +5,8 @@ export const profile = {
   location: 'Mumbai, India',
   email: 'kiran.capoor94@gmail.com',
   linkedin: 'https://www.linkedin.com/in/kiran-capoor/',
+  github: 'https://github.com/kiran-capoor94',
+  youtube: 'https://www.youtube.com/@CtrlAltTechWithKiran',
   summary: [
     "I'm a software engineer with over 8 years of experience across backend, platform, frontend, infra, and developer tooling. I work best when I can own a problem end to end — from architecture through to the thing running in production. I'm a genuine polyglot: TypeScript, Python, Go, Lua, GDScript depending on what the problem needs, and I build for the machine I sit on as much as I build for users.",
     "A lot of what I do outside work is tooling for the way I work. I built Wizard, a persistent memory and work triage layer for AI coding agents, because I kept losing context between sessions. I built Wand, a full custom Neovim distribution in Lua, because I wanted an editor that fits exactly how I think. I built Ritual, a one-command dotfiles bootstrap for my CachyOS machine with a Tailscale bridge to my Mac, because setup should be solved once. They're tools I use every day.",
