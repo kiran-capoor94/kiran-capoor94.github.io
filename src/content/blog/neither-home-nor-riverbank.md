@@ -3,6 +3,7 @@ title: "Neither Home Nor Riverbank"
 description: "On staffing/consulting work, an old Hindi idiom about a washerman's dog, and the specific moment you realize nobody in the chain actually owns your career."
 pubDate: 2026-07-06
 tags: ["career", "essay"]
+project: "essay"
 ---
 
 My mother has this phrase she'd pull out when I was a kid: *dhobi ka kutta, na ghar ka na ghat ka*. The washerman's dog, belonging neither to the house nor to the riverbank. The washerman drags his laundry down to the river every day and the dog follows him because that's what dogs do, and so the dog can't really stay home, it's always trailing off after the washerman. But it's not the washerman's dog at the riverbank either, that's not its place, it's just where it ends up. So it spends its whole life going back and forth between two places, and it belongs to neither one of them properly.

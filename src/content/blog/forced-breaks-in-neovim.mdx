@@ -1,0 +1,126 @@
+---
+title: "I built a Neovim plugin that physically won't let me skip a break"
+description: "The forced-break Pomodoro system in Wand.nvim, and an undo-corrupting file write an AI code review caught inside it."
+pubDate: 2026-07-06
+tags: ["neovim", "wand.nvim", "tooling", "postmortem"]
+project: "wand-nvim"
+---
+
+I don't read break reminders. A toast in the corner of my screen loses every time to "I'm 90% done with this refactor," and I've dismissed hundreds of them without absorbing a single word. So the Pomodoro system in Wand.nvim, my Neovim distribution, isn't a reminder. It behaves more like a lock screen.
+
+<svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:var(--font-mono);font-size:11px;">
+  <rect x="10" y="55" width="130" height="50" rx="6" fill="var(--color-bg-alt)" stroke="var(--color-border)" />
+  <text x="75" y="76" fill="var(--color-text)" text-anchor="middle">work session ends</text>
+  <text x="75" y="92" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">notify + notify-send</text>
+
+  <path d="M145 80 L180 80" stroke="var(--color-text-muted)" marker-end="url(#arrow2)" />
+  <text x="163" y="70" fill="var(--color-text-muted)" text-anchor="middle" font-size="9">30s ignored</text>
+
+  <rect x="185" y="55" width="130" height="50" rx="6" fill="var(--color-bg-alt)" stroke="var(--color-yellow)" />
+  <text x="250" y="76" fill="var(--color-yellow)" text-anchor="middle">dialog appears</text>
+  <text x="250" y="92" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">type exact phrase</text>
+
+  <path d="M320 80 L355 80" stroke="var(--color-text-muted)" marker-end="url(#arrow2)" />
+  <text x="337" y="70" fill="var(--color-text-muted)" text-anchor="middle" font-size="9">confirmed</text>
+
+  <rect x="360" y="30" width="150" height="100" rx="6" fill="var(--color-bg-alt)" stroke="var(--color-red)" />
+  <text x="435" y="55" fill="var(--color-red)" text-anchor="middle">full-screen overlay</text>
+  <text x="435" y="72" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">WinEnter → recaptures</text>
+  <text x="435" y="86" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">InsertLeave → re-enters</text>
+  <text x="435" y="100" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">insert mode</text>
+  <text x="435" y="118" fill="var(--color-green)" text-anchor="middle" font-size="10">only "stop" exits</text>
+
+  <path d="M515 80 L550 80" stroke="var(--color-text-muted)" marker-end="url(#arrow2)" />
+
+  <rect x="555" y="55" width="130" height="50" rx="6" fill="var(--color-bg-alt)" stroke="var(--color-green)" />
+  <text x="620" y="80" fill="var(--color-green)" text-anchor="middle">back to work</text>
+
+  <defs>
+    <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="var(--color-text-muted)" />
+    </marker>
+  </defs>
+</svg>
+
+When a work session ends, it fires a `vim.notify` and a system notification at the same time, which is the polite phase, in case that's actually enough for once. If it gets ignored for 30 seconds it stops being polite. A floating dialog shows up with a phrase pulled at random from a table of twelve, and I'll just paste the real table because it's funnier than any description of it:
+
+```lua
+local PHRASE_PAIRS = {
+  { "hydrate or perish", "yeet the timer" },
+  { "touch grass protocol", "unplug the hamster" },
+  { "activate couch mode", "eject eject eject" },
+  { "release the snacks", "ctrl alt retreat" },
+  { "summon the tea wizard", "abort mission captain" },
+  { "nap.exe --force", "pull the ripcord" },
+  { "deploy the blanket", "sudo stop" },
+  { "engage chill thrusters", "defuse the tomato" },
+  { "initiate vibe shift", "rage quit gracefully" },
+  { "begin snack acquisition", "the timer is a lie" },
+  { "mummi ko bolu kya?", "mummi aa gayi, band kar bsdk!" },
+  { "thoda paani pee le bhai", "sab moh maya hai" },
+}
+```
+
+You can't dismiss the dialog. You have to type the exact phrase back, and while it's open, `q`, the arrow keys, the scroll wheel, and mouse clicks all get rebound to nothing in both normal and insert mode.
+
+Confirm the break and it doesn't let up, it commits harder. A full-screen floating window takes over the whole editor and runs its own countdown, using the same trick twice, once for focus and once for insert mode:
+
+```lua
+-- Force user back to insert mode if they escape
+vim.api.nvim_create_autocmd("InsertLeave", {
+  buffer = buf,
+  callback = function()
+    if M.is_open() then
+      vim.schedule(function()
+        if M.is_open() and vim.api.nvim_buf_is_valid(buf) then
+          vim.cmd("startinsert")
+        end
+      end)
+    end
+  end,
+})
+
+-- Recapture focus if user switches to another window
+vim.api.nvim_create_autocmd("WinEnter", {
+  callback = function()
+    if M.is_open() and vim.api.nvim_win_is_valid(win_id)
+      and vim.api.nvim_get_current_win() ~= win_id then
+      vim.api.nvim_set_current_win(win_id)
+      vim.cmd("startinsert")
+    end
+  end,
+})
+```
+
+Switch windows and `WinEnter` yanks focus straight back. Hit Escape trying to bail and `InsertLeave` shoves you back into insert mode. The only way out is typing "stop." For two minutes, the entire job of this plugin is to be more stubborn than I am, and so far it's winning.
+
+That part's fun to demo. The part worth actually writing about is a bug that lived inside it for a while.
+
+The original overlay, when it had to write a large file, used Neovim's async `vim.uv` file-write API directly. It got caught during a full repo review I ran with an AI reviewer, and the commit is genuinely co-authored by "Claude Opus 4.6 (1M context)" because that felt like the honest way to credit it. Here's the actual diff:
+
+```diff
+- -- Async save for large files using libuv
+- M.async_save = function()
+-   local buf = vim.api.nvim_get_current_buf()
+-   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+-   local data = table.concat(lines, '\n') .. '\n'
+-   vim.uv.fs_open(filename, 'w', 438, function(err_open, fd)
+-     vim.uv.fs_write(fd, data, 0, function(err_write)
+-       vim.uv.fs_close(fd)
+-       -- ...manually fires BufWritePost, sets modified = false
+-     end)
+-   end)
+- end
+
++ -- Save large files, skipping BufWritePre hooks (formatting, whitespace trim)
++ -- but preserving Neovim's undo history, swap file, and buffer state.
++ M.large_file_save = function()
++   vim.cmd('noautocmd silent w')
++ end
+```
+
+The async version looked reasonable on its face, non-blocking, the modern API, nothing about reaching for it looks wrong. Except it skips Neovim's normal buffer-write path entirely and hand-rolls the parts of a save that Neovim already handles for you, which on a large file can leave the undo history or the swap file in a bad state. Not a cosmetic bug. The kind you don't notice until the day your undo tree is just gone.
+
+The same commit turned up a second, unrelated problem: an LSP race that an earlier commit had "solved" with `vim.defer_fn(function() ... end, 100)`, a hundred-millisecond sleep and a hope that the language server would be ready by then. That got replaced with `vim.schedule(function() ... end)`, which doesn't guess at timing at all, it just runs on the next tick once Neovim's actually free. Neither fix is clever. They're both just refusing to leave a guess sitting in the code where it could quietly fail later, on someone else's machine, or mine, a year from now.
+
+People laugh at the forced-break dialog when I show it to them. Nobody ever asks about the write path. But the dialog is the part that gets someone to try the plugin, and the boring one-line fix is the part that makes it something I still trust enough to run every day. I wrote about the same "don't run things you don't have to" instinct from a completely different angle in [getting Neovim's boot time under 100ms](/blog/neovim-under-100ms/) — same config, same discipline, aimed at startup instead of at me.

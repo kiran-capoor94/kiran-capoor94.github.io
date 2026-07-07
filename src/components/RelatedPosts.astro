@@ -1,0 +1,70 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+interface Props {
+  currentId: string;
+  project: 'wizard' | 'wand-nvim' | 'essay';
+}
+
+const { currentId, project } = Astro.props;
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const related: CollectionEntry<'blog'>[] = allPosts
+  .filter((post) => post.id !== currentId && post.data.project === project)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+{
+  related.length > 0 && (
+    <section class="related">
+      <p class="related-label">
+        <span class="hash">#</span> more on {project}
+      </p>
+      <ul class="related-list">
+        {related.map((post) => (
+          <li>
+            <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+            <span class="muted"> — {post.data.description}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .related {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .related-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin: 0 0 0.75rem;
+  }
+
+  .hash {
+    color: var(--color-magenta);
+  }
+
+  .related-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .related-list a {
+    font-weight: 600;
+  }
+
+  .muted {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+  }
+</style>

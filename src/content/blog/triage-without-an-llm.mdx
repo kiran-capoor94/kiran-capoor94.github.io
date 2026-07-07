@@ -1,0 +1,78 @@
+---
+title: "Why I didn't let an LLM decide what to work on next"
+description: "Wizard's work-triage scorer is a weighted sum, not a model call. The LLM only writes the sentence explaining the ranking, it doesn't produce it."
+pubDate: 2026-07-06
+tags: ["ai-engineering", "wizard", "architecture"]
+project: "wizard"
+---
+
+Wizard tracks every task I've ever told an agent about, and at some point I needed a way to ask it "what should I actually work on right now" and get an answer that wasn't just the most recently mentioned thing. The obvious move in 2026 is to hand the list to an LLM with a decent prompt and let it rank things. I tried that early on, and it worked in the sense that it produced plausible-sounding output. It didn't work in the sense that asking it twice in a row gave me two different orderings for the same data.
+
+That's the part that killed it for me. A prioritization tool that reorders your work differently every time you ask isn't prioritizing anything, it's improvising. So the ranking in Wizard now is a plain weighted sum over a handful of scores, no model involved at all, and the LLM only shows up afterward to write a sentence explaining why the top result is the top result.
+
+<svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:var(--font-mono);font-size:12px;">
+  <rect x="10" y="70" width="120" height="60" rx="6" fill="var(--color-bg-alt)" stroke="var(--color-border)" />
+  <text x="70" y="95" fill="var(--color-text)" text-anchor="middle">task list</text>
+  <text x="70" y="112" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">priority, notes,</text>
+  <text x="70" y="124" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">stale_days</text>
+
+  <path d="M135 100 L175 100" stroke="var(--color-text-muted)" marker-end="url(#arrow)" />
+
+  <rect x="180" y="60" width="140" height="80" rx="6" fill="var(--color-bg-alt)" stroke="var(--color-yellow)" />
+  <text x="250" y="82" fill="var(--color-yellow)" text-anchor="middle">weighted sum</text>
+  <text x="250" y="100" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">deterministic,</text>
+  <text x="250" y="114" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">per-mode weights</text>
+  <text x="250" y="128" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">(focus/quick-wins/unblock)</text>
+
+  <path d="M325 100 L365 100" stroke="var(--color-text-muted)" marker-end="url(#arrow)" />
+
+  <rect x="370" y="70" width="120" height="60" rx="6" fill="var(--color-bg-alt)" stroke="var(--color-border)" />
+  <text x="430" y="95" fill="var(--color-text)" text-anchor="middle">ranked list</text>
+  <text x="430" y="112" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">same input,</text>
+  <text x="430" y="124" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">same order, always</text>
+
+  <path d="M495 100 L535 100" stroke="var(--color-text-muted)" marker-end="url(#arrow)" />
+
+  <rect x="540" y="60" width="150" height="80" rx="6" fill="var(--color-bg-alt)" stroke="var(--color-cyan)" />
+  <text x="615" y="82" fill="var(--color-cyan)" text-anchor="middle">LLM narrates</text>
+  <text x="615" y="100" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">only the top result,</text>
+  <text x="615" y="114" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">capped ~120 tokens,</text>
+  <text x="615" y="128" fill="var(--color-text-muted)" text-anchor="middle" font-size="10">never re-ranks</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="var(--color-text-muted)" />
+    </marker>
+  </defs>
+</svg>
+
+There are three modes, `focus`, `quick-wins`, and `unblock`, and they're really just different weight vectors over the same four inputs. This is the actual table, unedited:
+
+```python
+_MODE_WEIGHTS: dict[str, dict[str, float]] = {
+    "focus":      {"priority": 0.50, "recency": 0.30, "momentum": 0.20, "simplicity": 0.00},
+    "quick-wins": {"priority": 0.20, "recency": 0.15, "momentum": 0.15, "simplicity": 0.50},
+    "unblock":    {"priority": 0.40, "recency": 0.40, "momentum": 0.20, "simplicity": 0.00},
+}
+
+def _score_task(task: TaskContext, mode: str = "focus") -> float:
+    weights = _MODE_WEIGHTS.get(mode, _MODE_WEIGHTS["focus"])
+
+    priority_score = _PRIORITY_SCORES.get(task.priority.value, 0.2)
+    recency_score = 1.0 / (1.0 + task.stale_days)
+    momentum_score = min(task.note_count / 10.0, 1.0)          # saturates at 10 notes
+    simplicity_score = 1.0 - min(task.note_count / 20.0, 1.0)  # more notes = more complex
+
+    return (
+        weights["priority"] * priority_score
+        + weights["recency"] * recency_score
+        + weights["momentum"] * momentum_score
+        + weights["simplicity"] * simplicity_score
+    )
+```
+
+Quick-wins weighs simplicity at 0.50 and barely cares about priority. Focus flips that, priority gets 0.50 and simplicity doesn't count at all. Recency decays as `1 / (1 + stale_days)`, so a task goes quiet fast if nobody's touched it in a while. Momentum saturates once a task has around ten notes attached to it, more than that and it stops mattering. None of this is exotic. It's the kind of arithmetic you'd sketch on a whiteboard in five minutes, and that's the point, I can read the formula and know exactly why task A beat task B. I can't do that with a model's hidden reasoning, and for something I'm going to trust every morning, that mattered more to me than a fancier ranking would have.
+
+The LLM's job starts only after the ranking is already fixed. It gets the top few tasks and writes a short "why" tying them together, capped at around 120 tokens so it can't ramble, and that's the only non-deterministic part of the output. If the model's unavailable or times out, the ranking still comes back, it just comes back without the paragraph on top. Nothing about the actual decision depends on the model responding at all.
+
+I ran into a version of this same split while working on transcript synthesis too, in [the post about un-shipping a token-saving format](/blog/unshipping-toon/) — different feature, same underlying instinct: the more a piece of output looks like a decision, the more I want it to come from something I can audit line by line. Language is a fine thing to hand to a model. Deciding what I do with my next two hours isn't, or at least it isn't for me.
