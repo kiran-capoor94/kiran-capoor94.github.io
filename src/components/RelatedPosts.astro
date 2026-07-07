@@ -8,6 +8,12 @@ interface Props {
 
 const { currentId, project } = Astro.props;
 
+const PROJECT_LABEL: Record<string, string> = {
+  wizard: 'wizard',
+  'wand-nvim': 'wand.nvim',
+  essay: 'essay',
+};
+
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const related: CollectionEntry<'blog'>[] = allPosts
   .filter((post) => post.id !== currentId && post.data.project === project)
@@ -19,7 +25,7 @@ const related: CollectionEntry<'blog'>[] = allPosts
   related.length > 0 && (
     <section class="related">
       <p class="related-label">
-        <span class="hash">#</span> more on {project}
+        <span class="hash">#</span> more on {PROJECT_LABEL[project]}
       </p>
       <ul class="related-list">
         {related.map((post) => (
