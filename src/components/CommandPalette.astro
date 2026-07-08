@@ -188,6 +188,12 @@ const entries: Entry[] = [
     padding: 12vh 1rem 1rem;
   }
 
+  /* the [hidden] attribute is how open/close is toggled — author CSS above
+     would otherwise override the UA rule and pin the palette open */
+  .cmdk[hidden] {
+    display: none;
+  }
+
   .cmdk-backdrop {
     position: absolute;
     inset: 0;
