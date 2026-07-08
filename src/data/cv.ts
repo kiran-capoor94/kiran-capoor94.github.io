@@ -30,12 +30,12 @@ export interface Metric {
 }
 
 export const metrics: Metric[] = [
+  { value: '166', label: 'services & apps migrated', detail: '98 services + 68 apps · AU → UK AWS · SiSU' },
+  { value: '~30%', label: 'faster client data exports', detail: 'via Halo orchestration · SiSU' },
   { value: '3x', label: 'dept revenue', detail: '₹4Cr → ₹12Cr · Schbang', series: [4, 6, 9, 12] },
   { value: '15→66', label: 'team scaled', detail: 'eng, UX/UI & PM · Schbang', series: [15, 28, 44, 66] },
   { value: '~25%', label: 'faster app perf', detail: '13+ services off legacy · Oaktree' },
   { value: '~50%', label: 'faster dev turnaround', detail: 'plan→design→implement · Oaktree' },
-  { value: '9+', label: 'years shipping', detail: 'backend, platform, AI · career' },
-  { value: '<100ms', label: 'wand cold boot', detail: 'full LSP/DAP/test stack · IC' },
 ];
 
 // LinkedIn recommendations / colleague quotes. Renders only when non-empty —
@@ -128,6 +128,8 @@ export const experience: Experience[] = [
     period: 'Nov 2024 – Present',
     location: 'Remote (India)',
     points: [
+      'Migrated 98 services and 68 applications from AWS Australia to the UK region — a full re-homing of the platform’s cloud footprint.',
+      'Cut client data-export time by ~30% through Halo, the orchestration product.',
       'Architect and build integration pipelines and API layers connecting third-party health-data providers into the core platform across three products: Halo (orchestration), Universe (core health platform), and SISU IQ (reporting).',
       'Lead architecture decisions on event-driven data ingestion, distributed-service reliability, and API contract design across the stack.',
       'Designed and shipped internal AI tooling and MCP-based integrations that reduced engineering workflow overhead across the team.',
