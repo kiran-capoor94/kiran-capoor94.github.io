@@ -69,11 +69,11 @@ export const uses: UsesGroup[] = [
     ],
   },
   {
-    group: 'os & machine',
-    note: 'update with your actual hardware',
+    group: 'os & packages',
     items: [
-      { name: 'CachyOS (Arch)', detail: 'rolling, tuned; yay/AUR for everything' },
-      { name: 'Linux workstation', detail: 'CPU / RAM / GPU — fill in your specs' },
+      { name: 'CachyOS (Arch)', detail: 'rolling release, performance-tuned kernel' },
+      { name: 'yay / AUR', detail: 'package management, AUR builds and all' },
+      { name: 'systemd', detail: 'services, timers, and unit management' },
     ],
   },
   {
