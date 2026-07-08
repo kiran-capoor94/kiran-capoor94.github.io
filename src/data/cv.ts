@@ -69,11 +69,23 @@ export const uses: UsesGroup[] = [
     ],
   },
   {
-    group: 'os & packages',
+    group: 'operating systems',
     items: [
-      { name: 'CachyOS (Arch)', detail: 'rolling release, performance-tuned kernel' },
-      { name: 'yay / AUR', detail: 'package management, AUR builds and all' },
-      { name: 'systemd', detail: 'services, timers, and unit management' },
+      { name: 'CachyOS (Arch)', detail: 'primary daily driver — rolling, performance-tuned kernel' },
+      { name: 'macOS', detail: 'on the MacBook Air' },
+      { name: 'Windows', detail: 'dual-boot on the desktop when the work calls for it' },
+      { name: 'yay / AUR', detail: 'package management on Arch, AUR builds and all' },
+    ],
+  },
+  {
+    group: 'machines & desk',
+    items: [
+      { name: 'Desktop', detail: 'custom build · Ryzen 9 5900X · RTX 3060 12GB · 16GB RAM' },
+      { name: 'Laptop', detail: 'Ryzen 7 6800H · RTX 3070 Ti · 16GB RAM' },
+      { name: 'MacBook Air', detail: 'Apple M4 · 24GB RAM' },
+      { name: 'Displays', detail: 'dual monitor' },
+      { name: 'Keyboard', detail: 'Razer mechanical' },
+      { name: 'Mouse', detail: 'Logitech G402' },
     ],
   },
   {
