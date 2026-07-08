@@ -175,22 +175,27 @@ const readingTime = Math.max(1, Math.round(words / 200));
       color: var(--color-text);
       font-size: 0.95rem;
       line-height: 1.55;
+      font-family: var(--font-sans);
     }
 
     .prose {
-      font-size: 1rem;
+      font-size: 1.02rem;
       line-height: 1.75;
+      font-family: var(--font-sans);
     }
 
+    /* headings and code stay in the terminal's mono voice */
     .prose :global(h2) {
       margin-top: 2rem;
       font-size: 1.3rem;
       color: var(--color-yellow);
+      font-family: var(--font-mono);
     }
 
     .prose :global(h3) {
       margin-top: 1.5rem;
       font-size: 1.05rem;
+      font-family: var(--font-mono);
     }
 
     .prose :global(p) {

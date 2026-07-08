@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile, projects } from '../data/cv';
 import { getCollection } from 'astro:content';
+import StatStrip from '../components/StatStrip.astro';
+import LatestVideos from '../components/LatestVideos.astro';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -114,6 +116,7 @@ const pitch =
         '&nbsp;&nbsp;help &mdash; show this list<br>' +
         '&nbsp;&nbsp;about, whoami, cv &mdash; open the CV page<br>' +
         '&nbsp;&nbsp;projects, ls &mdash; open the projects page<br>' +
+        '&nbsp;&nbsp;uses &mdash; my daily-driver setup<br>' +
         '&nbsp;&nbsp;blog &mdash; open the blog<br>' +
         '&nbsp;&nbsp;contact, mail, hire &mdash; email me<br>' +
         '&nbsp;&nbsp;github, linkedin, youtube &mdash; open my profiles<br>' +
@@ -151,6 +154,9 @@ const pitch =
           case 'projects':
           case 'ls':
             goTo('/projects/', 'opening projects page...');
+            break;
+          case 'uses':
+            goTo('/uses/', 'opening uses page...');
             break;
           case 'blog':
             goTo('/blog/', 'opening blog...');
@@ -259,6 +265,15 @@ const pitch =
 
   <section class="container section" data-reveal>
     <div class="section-head">
+      <h2><span class="hash">#</span> impact</h2>
+      <a href="/about/">man kiran &rarr;</a>
+    </div>
+    <p class="section-tagline muted">// the numbers, before the narrative.</p>
+    <StatStrip />
+  </section>
+
+  <section class="container section" data-reveal>
+    <div class="section-head">
       <h2><span class="hash">#</span> side_projects</h2>
       <a href="/projects/">ls -la &rarr;</a>
     </div>
@@ -296,6 +311,10 @@ const pitch =
       )
     }
   </section>
+
+  <div class="container section">
+    <LatestVideos />
+  </div>
 
   <style>
     .hero-section {

@@ -15,6 +15,87 @@ export const profile = {
   ],
 };
 
+// Headline outcomes — the numbers a hiring manager scans for first.
+// `series` (optional) drives a tiny inline sparkline/bar; keep it 2–6 points.
+export interface Metric {
+  value: string;
+  label: string;
+  detail?: string;
+  series?: number[];
+}
+
+export const metrics: Metric[] = [
+  { value: '3x', label: 'dept revenue', detail: '₹4Cr → ₹12Cr at Schbang', series: [4, 6, 9, 12] },
+  { value: '15→66', label: 'team scaled', detail: 'engineering, UX/UI & PM', series: [15, 28, 44, 66] },
+  { value: '60%+', label: 'profit margin', detail: 'up from sub-40%', series: [38, 46, 55, 62] },
+  { value: '9+', label: 'years shipping', detail: 'backend, platform, AI' },
+  { value: '100+', label: 'projects delivered', detail: 'first 100 in 3 years' },
+  { value: '<100ms', label: 'wand cold boot', detail: 'full LSP/DAP/test stack' },
+];
+
+// LinkedIn recommendations / colleague quotes. Renders only when non-empty —
+// paste real quotes here (attribution matters more than volume; 2–3 is plenty).
+export interface Testimonial {
+  quote: string;
+  name: string;
+  title: string;
+  link?: string;
+}
+
+export const testimonials: Testimonial[] = [
+  // {
+  //   quote: 'Kiran ...',
+  //   name: 'Full Name',
+  //   title: 'Role, Company',
+  //   link: 'https://www.linkedin.com/in/...',
+  // },
+];
+
+// /uses — the daily-driver setup. Grouped like the rest of the site.
+export interface UsesGroup {
+  group: string;
+  note?: string;
+  items: { name: string; detail: string; link?: string }[];
+}
+
+export const uses: UsesGroup[] = [
+  {
+    group: 'editor & shell',
+    items: [
+      { name: 'Neovim (Wand)', detail: 'my own 5k-line Lua distribution, sub-100ms boot', link: 'https://github.com/buildWithAlchemist/wand' },
+      { name: 'Fish', detail: 'interactive shell, no framework, just functions' },
+      { name: 'tmux', detail: 'session-per-project, the site nav is a love letter to it' },
+      { name: 'Ghostty / kitty', detail: 'GPU terminal, JetBrains Mono' },
+    ],
+  },
+  {
+    group: 'os & machine',
+    note: 'update with your actual hardware',
+    items: [
+      { name: 'CachyOS (Arch)', detail: 'rolling, tuned; yay/AUR for everything' },
+      { name: 'Linux workstation', detail: 'CPU / RAM / GPU — fill in your specs' },
+    ],
+  },
+  {
+    group: 'dotfiles & infra',
+    items: [
+      { name: 'Ritual', detail: 'one-command machine bootstrap', link: 'https://github.com/kiran-capoor94/ritual' },
+      { name: 'chezmoi', detail: 'dotfile management with per-machine templating' },
+      { name: 'Tailscale', detail: 'flat network across all my machines' },
+      { name: 'SSHFS + systemd', detail: 'remote mounts, service management' },
+    ],
+  },
+  {
+    group: 'languages & runtimes',
+    items: [
+      { name: 'TypeScript / Node', detail: 'primary for platform & tooling work' },
+      { name: 'Python 3.12 (uv)', detail: 'AI tooling, MCP servers, scripts' },
+      { name: 'Go', detail: 'services & templating where it fits' },
+      { name: 'Lua', detail: 'everything Neovim' },
+    ],
+  },
+];
+
 export interface Experience {
   role: string;
   company: string;
@@ -134,6 +215,7 @@ export interface Project {
   impact?: string;
   stack: string[];
   link?: string;
+  cast?: string; // path to an asciinema recording in /public/casts, e.g. '/casts/wand.cast'
 }
 
 export const projects: Project[] = [

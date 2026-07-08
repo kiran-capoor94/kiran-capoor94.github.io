@@ -1,0 +1,86 @@
+---
+// Embeds an asciinema recording (.cast in /public/casts) using the locally
+// vendored player — no external host, so it works on GitHub Pages and passes
+// any CSP. Record new casts with:  asciinema rec public/casts/<name>.cast
+interface Props {
+  src: string;
+  title?: string;
+  poster?: string; // e.g. "npt:0:03" to show the frame at 3s before play
+  idleLimit?: number;
+}
+const { src, title = 'recording', poster = 'npt:0:02', idleLimit = 2 } = Astro.props;
+const id = 'cast-' + src.replace(/[^a-z0-9]+/gi, '-');
+---
+
+<div class="cast">
+  <div class="cast-bar">
+    <span class="term-dot red"></span>
+    <span class="term-dot yellow"></span>
+    <span class="term-dot green"></span>
+    <span class="cast-title">{title}</span>
+  </div>
+  <div id={id} class="cast-player" data-src={src} data-poster={poster} data-idle={idleLimit}></div>
+</div>
+
+<link rel="stylesheet" href="/vendor/asciinema-player.css" />
+<script>
+  // idempotent loader for the vendored UMD bundle, then init every .cast-player
+  function initCasts() {
+    const players = document.querySelectorAll<HTMLElement>('.cast-player:not([data-inited])');
+    players.forEach((el) => {
+      el.setAttribute('data-inited', '1');
+      // @ts-ignore — global from the vendored bundle
+      window.AsciinemaPlayer.create(el.dataset.src, el, {
+        poster: el.dataset.poster,
+        idleTimeLimit: Number(el.dataset.idle) || 2,
+        fit: 'width',
+        terminalFontFamily: "'JetBrains Mono', ui-monospace, monospace",
+        theme: 'asciinema',
+        controls: true,
+      });
+    });
+  }
+
+  // @ts-ignore
+  if (window.AsciinemaPlayer) {
+    initCasts();
+  } else if (!document.getElementById('asciinema-loader')) {
+    const s = document.createElement('script');
+    s.id = 'asciinema-loader';
+    s.src = '/vendor/asciinema-player.min.js';
+    s.addEventListener('load', initCasts);
+    document.head.appendChild(s);
+  } else {
+    document.getElementById('asciinema-loader')?.addEventListener('load', initCasts);
+  }
+</script>
+
+<style>
+  .cast {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-bg-alt);
+    box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+    margin: 1.5rem 0;
+  }
+
+  .cast-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+    background: var(--color-bg-raised);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cast-title {
+    margin-left: 0.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+  }
+
+  .cast-player {
+    padding: 0.5rem;
+  }
+</style>

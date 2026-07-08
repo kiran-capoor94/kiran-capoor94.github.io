@@ -1,0 +1,146 @@
+---
+import videoData from '../data/videos.json';
+
+interface Props {
+  limit?: number;
+}
+const { limit = 3 } = Astro.props;
+const videos = videoData.videos.slice(0, limit);
+
+function fmt(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+---
+
+{
+  videos.length > 0 && (
+    <section class="vids" data-reveal>
+      <div class="vids-head">
+        <h2>
+          <span class="hash">#</span> ctrl_alt_tech
+        </h2>
+        <a href={videoData.channelUrl} target="_blank" rel="noopener noreferrer">
+          youtube-dl &rarr;
+        </a>
+      </div>
+      <p class="vids-tagline muted">// screen-recorded deep dives on editors, tooling, and the engineering nobody demos.</p>
+      <div class="vid-grid">
+        {videos.map((v) => (
+          <a class="vid" href={v.url} target="_blank" rel="noopener noreferrer">
+            <div class="thumb-wrap">
+              <img
+                class="thumb"
+                src={v.thumbnail}
+                alt={`Thumbnail: ${v.title}`}
+                width="480"
+                height="360"
+                loading="lazy"
+              />
+              <span class="play" aria-hidden="true">▶</span>
+            </div>
+            <p class="vid-title">{v.title}</p>
+            <span class="vid-date muted">{fmt(v.published)}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .vids {
+    margin-top: 1rem;
+  }
+
+  .vids-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+  }
+
+  .vids-head h2 {
+    font-size: 1.15rem;
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .hash {
+    color: var(--color-magenta);
+  }
+
+  .vids-tagline {
+    margin: 0 0 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .vid-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .vid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .vid:hover {
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  .thumb-wrap {
+    position: relative;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: var(--color-bg-raised);
+    transition: border-color 0.2s ease;
+  }
+
+  .vid:hover .thumb-wrap {
+    border-color: var(--color-accent);
+  }
+
+  .thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .vid:hover .play {
+    opacity: 1;
+  }
+
+  .vid-title {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .vid:hover .vid-title {
+    color: var(--color-accent);
+  }
+
+  .vid-date {
+    font-size: 0.78rem;
+  }
+</style>

@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { uses } from '../data/cv';
+---
+
+<BaseLayout title="Uses" description="The tools, editor, and machine Kiran Capoor works on every day.">
+  <div class="container page">
+    <p class="prompt-line"><span class="prompt">cat ~/.config/setup.md</span></p>
+    <h1><span class="hash">#</span> uses</h1>
+    <p class="intro muted">// the daily-driver setup. most of it exists because an off-the-shelf tool annoyed me first.</p>
+
+    <div class="uses-groups">
+      {
+        uses.map((group) => (
+          <section class="uses-group" data-reveal>
+            <h2>
+              <span class="prompt-symbol">$</span> {group.group}
+              {group.note && <span class="note muted"># {group.note}</span>}
+            </h2>
+            <dl class="rows">
+              {group.items.map((item) => (
+                <div class="row">
+                  <dt>
+                    {item.link ? (
+                      <a href={item.link} target="_blank" rel="noopener noreferrer">
+                        {item.name}
+                      </a>
+                    ) : (
+                      item.name
+                    )}
+                  </dt>
+                  <dd>{item.detail}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ))
+      }
+    </div>
+
+    <p class="outro muted">// inspired by <a href="https://uses.tech" target="_blank" rel="noopener noreferrer">uses.tech</a> — a directory of developer setups.</p>
+  </div>
+
+  <style>
+    .page {
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .prompt-line {
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin: 0 0 0.5rem;
+      color: var(--color-cyan);
+    }
+
+    .hash {
+      color: var(--color-magenta);
+    }
+
+    .intro {
+      margin-bottom: 2.5rem;
+    }
+
+    .uses-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .uses-group h2 {
+      font-size: 1.05rem;
+      margin: 0 0 1rem;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 0.5rem;
+      color: var(--color-text);
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .prompt-symbol {
+      color: var(--color-green);
+    }
+
+    .note {
+      font-size: 0.75rem;
+      font-weight: 400;
+    }
+
+    .rows {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 12rem 1fr;
+      gap: 1rem;
+      align-items: baseline;
+    }
+
+    .row dt {
+      color: var(--color-yellow);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .row dd {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: 0.88rem;
+      font-family: var(--font-sans);
+      line-height: 1.5;
+    }
+
+    .outro {
+      margin-top: 3rem;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 560px) {
+      .row {
+        grid-template-columns: 1fr;
+        gap: 0.15rem;
+      }
+    }
+  </style>
+</BaseLayout>

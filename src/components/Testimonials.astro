@@ -1,0 +1,94 @@
+---
+import { testimonials } from '../data/cv';
+---
+
+{
+  testimonials.length > 0 && (
+    <section class="block" data-reveal>
+      <h2>
+        <span class="hash">##</span> references
+      </h2>
+      <p class="section-tagline muted">// git blame, but for character.</p>
+      <div class="quote-grid">
+        {testimonials.map((t) => (
+          <figure class="quote">
+            <blockquote>{t.quote}</blockquote>
+            <figcaption>
+              <span class="q-name">{t.name}</span>
+              <span class="q-title muted">{t.title}</span>
+              {t.link && (
+                <a href={t.link} target="_blank" rel="noopener noreferrer">
+                  verify &rarr;
+                </a>
+              )}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .block {
+    margin-bottom: 3rem;
+  }
+
+  .block h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .hash {
+    color: var(--color-magenta);
+  }
+
+  .section-tagline {
+    margin: 0.6rem 0 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .quote-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .quote {
+    margin: 0;
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-green);
+    border-radius: 0 6px 6px 0;
+    padding: 1.1rem 1.25rem;
+    background: var(--color-bg-alt);
+  }
+
+  .quote blockquote {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+
+  .quote figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-size: 0.85rem;
+  }
+
+  .q-name {
+    color: var(--color-yellow);
+    font-weight: 700;
+  }
+
+  .q-title {
+    font-size: 0.8rem;
+  }
+
+  .muted {
+    color: var(--color-text-muted);
+  }
+</style>

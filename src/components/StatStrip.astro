@@ -1,0 +1,75 @@
+---
+import { metrics } from '../data/cv';
+import Sparkline from './Sparkline.astro';
+
+interface Props {
+  limit?: number;
+}
+const { limit } = Astro.props;
+const items = limit ? metrics.slice(0, limit) : metrics;
+---
+
+<dl class="stat-strip">
+  {
+    items.map((m) => (
+      <div class="stat">
+        <dt class="stat-value">{m.value}</dt>
+        <dd class="stat-body">
+          <span class="stat-label">{m.label}</span>
+          {m.detail && <span class="stat-detail">{m.detail}</span>}
+          {m.series && <Sparkline series={m.series} />}
+        </dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    margin: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-border);
+  }
+
+  .stat {
+    background: var(--color-bg-alt);
+    padding: 1.1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .stat-value {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--color-cyan);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  .stat-detail {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+  }
+
+  .stat :global(.sparkline) {
+    margin-top: 0.5rem;
+  }
+</style>

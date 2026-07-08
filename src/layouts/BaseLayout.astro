@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { profile } from '../data/cv';
+import CommandPalette from '../components/CommandPalette.astro';
 
 interface Props {
   title: string;
@@ -20,9 +21,23 @@ const navItems = [
   { href: '/', label: 'home', key: '1' },
   { href: '/about/', label: 'about', key: '2' },
   { href: '/projects/', label: 'projects', key: '3' },
-  { href: '/blog/', label: 'blog', key: '4' },
+  { href: '/uses/', label: 'uses', key: '4' },
+  { href: '/blog/', label: 'blog', key: '5' },
 ];
 const currentPath = Astro.url.pathname;
+
+// Person structured data for rich search results (#9)
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.role,
+  description: profile.tagline,
+  email: `mailto:${profile.email}`,
+  url: Astro.site?.href,
+  address: { '@type': 'PostalAddress', addressLocality: profile.location },
+  sameAs: [profile.github, profile.linkedin, profile.youtube],
+};
 ---
 
 <!doctype html>
@@ -52,9 +67,10 @@ const currentPath = Astro.url.pathname;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} is:inline />
   </head>
   <body>
     <a href="#main" class="skip-link">skip to content</a>
@@ -86,6 +102,14 @@ const currentPath = Astro.url.pathname;
               </a>
             ))
           }
+          <button
+            type="button"
+            class="cmdk-trigger"
+            data-open-palette
+            aria-label="Open command palette (Control or Command + K)"
+          >
+            <span class="tab-key">⌘</span>k
+          </button>
         </nav>
       </div>
     </header>
@@ -93,6 +117,8 @@ const currentPath = Astro.url.pathname;
     <main id="main">
       <slot />
     </main>
+
+    <CommandPalette />
 
     <footer class="site-footer">
       <div class="container footer-inner">
@@ -350,6 +376,28 @@ const currentPath = Astro.url.pathname;
       .tab.active .tab-key {
         color: var(--color-bg);
         opacity: 0.7;
+      }
+
+      .cmdk-trigger {
+        font-family: var(--font-mono);
+        color: var(--color-text-muted);
+        font-size: 0.88rem;
+        padding: 0.35rem 0.6rem;
+        border-radius: 4px;
+        border: 1px solid var(--color-border);
+        background: none;
+        cursor: pointer;
+        margin-left: 0.35rem;
+      }
+
+      .cmdk-trigger:hover {
+        color: var(--color-text);
+        border-color: var(--color-accent);
+      }
+
+      .cmdk-trigger .tab-key {
+        color: var(--color-magenta);
+        margin-right: 0.15rem;
       }
 
       .nav-toggle {

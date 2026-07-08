@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile, experience, skills, education, certifications } from '../data/cv';
+import StatStrip from '../components/StatStrip.astro';
+import Testimonials from '../components/Testimonials.astro';
 
 function pseudoHash(input: string): string {
   let h = 0;
@@ -22,7 +24,10 @@ const roleCount = experience.length;
 <BaseLayout title="About" description={profile.summary[0]}>
   <div class="container page">
     <p class="prompt-line"><span class="prompt">man kiran</span></p>
-    <h1><span class="hash">#</span> about</h1>
+    <div class="about-head">
+      <h1><span class="hash">#</span> about</h1>
+      <button type="button" class="print-cv" id="print-cv">./export-cv.sh &rarr; pdf</button>
+    </div>
 
     <section class="block" data-reveal>
       <dl class="man-block">
@@ -47,6 +52,10 @@ const roleCount = experience.length;
           </dd>
         </div>
       </dl>
+    </section>
+
+    <section class="block" data-reveal>
+      <StatStrip />
     </section>
 
     <section class="block" data-reveal>
@@ -100,6 +109,8 @@ const roleCount = experience.length;
       </div>
     </section>
 
+    <Testimonials />
+
     <section class="block" data-reveal>
       <h2><span class="hash">##</span> education</h2>
       <p class="section-tagline muted">// a chemistry degree that mostly taught me to debug things I can't see.</p>
@@ -127,10 +138,35 @@ const roleCount = experience.length;
       margin-bottom: 0.5rem;
     }
 
+    .about-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 0 0 2rem;
+    }
+
     h1 {
       font-size: 1.8rem;
-      margin: 0 0 2rem;
+      margin: 0;
       color: var(--color-cyan);
+    }
+
+    .print-cv {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--color-green);
+      background: none;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+    }
+
+    .print-cv:hover {
+      border-color: var(--color-green);
+      background: color-mix(in srgb, var(--color-green) 12%, transparent);
     }
 
     .hash {
@@ -187,6 +223,12 @@ const roleCount = experience.length;
       color: var(--color-text);
       font-size: 0.95rem;
       line-height: 1.65;
+      font-family: var(--font-sans);
+    }
+
+    /* keep the SYNOPSIS command line in mono */
+    .man-row dd code {
+      font-family: var(--font-mono);
     }
 
     .man-row dd p {
@@ -287,6 +329,7 @@ const roleCount = experience.length;
     .commit-body li {
       margin-bottom: 0.35rem;
       font-size: 0.92rem;
+      font-family: var(--font-sans);
     }
 
     .commit-body li::marker {
@@ -328,4 +371,25 @@ const roleCount = experience.length;
       color: var(--color-text-muted);
     }
   </style>
+
+  <script>
+    // "Download CV" → expand every collapsed job, then open the print dialog.
+    // The @media print stylesheet handles the ink-friendly layout.
+    function expandAll() {
+      document.querySelectorAll('details').forEach((d) => d.setAttribute('open', ''));
+    }
+    document.getElementById('print-cv')?.addEventListener('click', () => {
+      expandAll();
+      window.print();
+    });
+    // also expand for a browser-native Ctrl/Cmd+P
+    window.addEventListener('beforeprint', expandAll);
+
+    // arriving here from the command palette's "Download CV" action
+    if (sessionStorage.getItem('kc_print_cv')) {
+      sessionStorage.removeItem('kc_print_cv');
+      expandAll();
+      window.setTimeout(() => window.print(), 400);
+    }
+  </script>
 </BaseLayout>

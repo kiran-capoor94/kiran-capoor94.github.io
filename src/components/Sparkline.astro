@@ -1,0 +1,39 @@
+---
+// Tiny decorative inline bar sparkline. Purely illustrative — the real value
+// lives in the adjacent text, so this is aria-hidden.
+interface Props {
+  series: number[];
+  width?: number;
+  height?: number;
+}
+const { series, width = 64, height = 22 } = Astro.props;
+const max = Math.max(...series, 1);
+const gap = 3;
+const barW = (width - gap * (series.length - 1)) / series.length;
+const bars = series.map((v, i) => {
+  const h = Math.max(2, (v / max) * height);
+  return { x: i * (barW + gap), y: height - h, w: barW, h, last: i === series.length - 1 };
+});
+---
+
+<svg
+  class="sparkline"
+  width={width}
+  height={height}
+  viewBox={`0 0 ${width} ${height}`}
+  aria-hidden="true"
+  focusable="false"
+>
+  {bars.map((b) => (
+    <rect x={b.x} y={b.y} width={b.w} height={b.h} rx="1.5" class:list={['bar', { last: b.last }]} />
+  ))}
+</svg>
+
+<style>
+  .bar {
+    fill: var(--color-border);
+  }
+  .bar.last {
+    fill: var(--color-green);
+  }
+</style>

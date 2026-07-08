@@ -1,0 +1,308 @@
+---
+import { getCollection } from 'astro:content';
+import { profile, projects } from '../data/cv';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+type Entry = { label: string; hint: string; kind: string; href: string; external?: boolean };
+
+const entries: Entry[] = [
+  { label: 'Home', hint: 'the terminal', kind: 'page', href: '/' },
+  { label: 'About', hint: 'cv, experience, skills', kind: 'page', href: '/about/' },
+  { label: 'Projects', hint: 'things I built', kind: 'page', href: '/projects/' },
+  { label: 'Uses', hint: 'daily-driver setup', kind: 'page', href: '/uses/' },
+  { label: 'Blog', hint: 'writing', kind: 'page', href: '/blog/' },
+  ...projects.map((p) => ({
+    label: p.name,
+    hint: p.tagline,
+    kind: 'project',
+    href: p.link ?? '/projects/',
+    external: Boolean(p.link),
+  })),
+  ...posts.map((p) => ({
+    label: p.data.title,
+    hint: p.data.description,
+    kind: 'post',
+    href: `/blog/${p.id}/`,
+  })),
+  { label: 'Email me', hint: profile.email, kind: 'action', href: `mailto:${profile.email}`, external: true },
+  { label: 'GitHub', hint: 'source & side projects', kind: 'action', href: profile.github, external: true },
+  { label: 'LinkedIn', hint: 'the professional one', kind: 'action', href: profile.linkedin, external: true },
+  { label: 'YouTube', hint: 'Ctrl Alt Tech', kind: 'action', href: profile.youtube, external: true },
+  { label: 'Download CV', hint: 'print / save as pdf', kind: 'action', href: '#print-cv' },
+  { label: 'RSS', hint: 'subscribe', kind: 'action', href: '/rss.xml' },
+];
+---
+
+<div id="cmdk" class="cmdk" hidden>
+  <div class="cmdk-backdrop" data-close></div>
+  <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="cmdk-input-row">
+      <span class="cmdk-prompt">&gt;</span>
+      <input
+        id="cmdk-input"
+        class="cmdk-input"
+        type="text"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="cmdk-list"
+        aria-autocomplete="list"
+        placeholder="jump to anything… (esc to close)"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <kbd class="cmdk-esc">esc</kbd>
+    </div>
+    <ul id="cmdk-list" class="cmdk-list" role="listbox" aria-label="Results"></ul>
+    <p class="cmdk-empty" hidden>no matches — try fewer letters</p>
+  </div>
+</div>
+
+<script is:inline define:vars={{ entries }}>
+  (function () {
+    const root = document.getElementById('cmdk');
+    const input = document.getElementById('cmdk-input');
+    const list = document.getElementById('cmdk-list');
+    const empty = root?.querySelector('.cmdk-empty');
+    if (!root || !input || !list) return;
+
+    let filtered = entries;
+    let active = 0;
+    let lastFocused = null;
+
+    const KIND_LABEL = { page: 'page', project: 'project', post: 'post', action: 'go' };
+
+    function score(entry, q) {
+      const hay = (entry.label + ' ' + entry.hint + ' ' + entry.kind).toLowerCase();
+      if (!q) return 0;
+      const idx = hay.indexOf(q);
+      if (idx !== -1) return idx; // substring: earlier = better
+      // subsequence fallback
+      let qi = 0;
+      for (let i = 0; i < hay.length && qi < q.length; i++) if (hay[i] === q[qi]) qi++;
+      return qi === q.length ? 500 : Infinity;
+    }
+
+    function render() {
+      list.innerHTML = '';
+      filtered.forEach((e, i) => {
+        const li = document.createElement('li');
+        li.className = 'cmdk-item' + (i === active ? ' active' : '');
+        li.setAttribute('role', 'option');
+        li.setAttribute('aria-selected', i === active ? 'true' : 'false');
+        li.dataset.index = String(i);
+        li.innerHTML =
+          '<span class="cmdk-kind cmdk-kind-' + e.kind + '">' + (KIND_LABEL[e.kind] || e.kind) + '</span>' +
+          '<span class="cmdk-label"></span>' +
+          '<span class="cmdk-hint"></span>' +
+          (e.external ? '<span class="cmdk-ext" aria-hidden="true">↗</span>' : '');
+        li.querySelector('.cmdk-label').textContent = e.label;
+        li.querySelector('.cmdk-hint').textContent = e.hint;
+        li.addEventListener('click', () => go(i));
+        li.addEventListener('mousemove', () => {
+          if (active !== i) { active = i; paintActive(); }
+        });
+        list.appendChild(li);
+      });
+      empty.hidden = filtered.length > 0;
+    }
+
+    function paintActive() {
+      [...list.children].forEach((li, i) => {
+        const on = i === active;
+        li.classList.toggle('active', on);
+        li.setAttribute('aria-selected', on ? 'true' : 'false');
+        if (on) li.scrollIntoView({ block: 'nearest' });
+      });
+    }
+
+    function filter() {
+      const q = input.value.trim().toLowerCase();
+      filtered = entries
+        .map((e) => ({ e, s: score(e, q) }))
+        .filter((x) => x.s !== Infinity)
+        .sort((a, b) => a.s - b.s)
+        .map((x) => x.e);
+      active = 0;
+      render();
+    }
+
+    function go(i) {
+      const e = filtered[i];
+      if (!e) return;
+      close();
+      if (e.href === '#print-cv') {
+        if (location.pathname.startsWith('/about')) window.print();
+        else { sessionStorage.setItem('kc_print_cv', '1'); location.href = '/about/'; }
+        return;
+      }
+      if (e.external) window.open(e.href, '_blank', 'noopener,noreferrer');
+      else location.href = e.href;
+    }
+
+    function open() {
+      lastFocused = document.activeElement;
+      root.hidden = false;
+      input.value = '';
+      filter();
+      requestAnimationFrame(() => input.focus());
+    }
+
+    function close() {
+      root.hidden = true;
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
+    }
+
+    document.addEventListener('keydown', (ev) => {
+      const k = ev.key.toLowerCase();
+      if ((ev.metaKey || ev.ctrlKey) && k === 'k') {
+        ev.preventDefault();
+        root.hidden ? open() : close();
+        return;
+      }
+      if (root.hidden) return;
+      if (ev.key === 'Escape') { ev.preventDefault(); close(); }
+      else if (ev.key === 'ArrowDown') { ev.preventDefault(); active = Math.min(filtered.length - 1, active + 1); paintActive(); }
+      else if (ev.key === 'ArrowUp') { ev.preventDefault(); active = Math.max(0, active - 1); paintActive(); }
+      else if (ev.key === 'Enter') { ev.preventDefault(); go(active); }
+    });
+
+    input.addEventListener('input', filter);
+    root.querySelector('[data-close]')?.addEventListener('click', close);
+    document.querySelectorAll('[data-open-palette]').forEach((btn) =>
+      btn.addEventListener('click', open)
+    );
+  })();
+</script>
+
+<style>
+  .cmdk {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 12vh 1rem 1rem;
+  }
+
+  .cmdk-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .cmdk-panel {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+  }
+
+  .cmdk-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cmdk-prompt {
+    color: var(--color-green);
+    font-weight: 700;
+  }
+
+  .cmdk-input {
+    all: unset;
+    flex: 1;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    min-width: 0;
+  }
+
+  .cmdk-input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .cmdk-esc {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+  }
+
+  .cmdk-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.4rem;
+    max-height: 52vh;
+    overflow-y: auto;
+  }
+
+  .cmdk-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .cmdk-item.active {
+    background: var(--color-bg-raised);
+  }
+
+  .cmdk-kind {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    width: 4.2rem;
+    text-align: center;
+    color: var(--color-bg);
+  }
+
+  .cmdk-kind-page { background: var(--color-accent); }
+  .cmdk-kind-project { background: var(--color-yellow); }
+  .cmdk-kind-post { background: var(--color-magenta); }
+  .cmdk-kind-action { background: var(--color-green); }
+
+  .cmdk-label {
+    color: var(--color-text);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .cmdk-hint {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+
+  .cmdk-ext {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+  }
+
+  .cmdk-empty {
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+</style>

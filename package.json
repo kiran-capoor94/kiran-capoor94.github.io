@@ -11,6 +11,7 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
+    "refresh-data": "node scripts/fetch-data.mjs",
     "astro": "astro"
   },
   "dependencies": {
