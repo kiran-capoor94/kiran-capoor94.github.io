@@ -30,12 +30,12 @@ export interface Metric {
 }
 
 export const metrics: Metric[] = [
-  { value: '3x', label: 'dept revenue', detail: '₹4Cr → ₹12Cr at Schbang', series: [4, 6, 9, 12] },
-  { value: '15→66', label: 'team scaled', detail: 'engineering, UX/UI & PM', series: [15, 28, 44, 66] },
-  { value: '60%+', label: 'profit margin', detail: 'up from sub-40%', series: [38, 46, 55, 62] },
-  { value: '9+', label: 'years shipping', detail: 'backend, platform, AI' },
-  { value: '100+', label: 'projects delivered', detail: 'first 100 in 3 years' },
-  { value: '<100ms', label: 'wand cold boot', detail: 'full LSP/DAP/test stack' },
+  { value: '3x', label: 'dept revenue', detail: '₹4Cr → ₹12Cr · Schbang', series: [4, 6, 9, 12] },
+  { value: '15→66', label: 'team scaled', detail: 'eng, UX/UI & PM · Schbang', series: [15, 28, 44, 66] },
+  { value: '~25%', label: 'faster app perf', detail: '13+ services off legacy · Oaktree' },
+  { value: '~50%', label: 'faster dev turnaround', detail: 'plan→design→implement · Oaktree' },
+  { value: '9+', label: 'years shipping', detail: 'backend, platform, AI · career' },
+  { value: '<100ms', label: 'wand cold boot', detail: 'full LSP/DAP/test stack · IC' },
 ];
 
 // LinkedIn recommendations / colleague quotes. Renders only when non-empty —
