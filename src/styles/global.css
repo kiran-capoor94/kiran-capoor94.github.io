@@ -3,7 +3,8 @@
   --color-bg-alt: #16161e;
   --color-bg-raised: #1f2335;
   --color-text: #c0caf5;
-  --color-text-muted: #565f89;
+  /* was #565f89 — failed WCAG AA (2.5–2.9:1); #828bb8 clears 4.5:1 on every surface */
+  --color-text-muted: #828bb8;
   --color-border: #292e42;
   --color-accent: #7aa2f7;
   --color-accent-hover: #89b4fa;
@@ -27,6 +28,39 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* visible keyboard focus everywhere (WCAG 2.4.7) */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* skip-to-content link: first focusable element, hidden until focused */
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: -3rem;
+  z-index: 200;
+  padding: 0.5rem 0.9rem;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-radius: 0 0 4px 4px;
+  font-weight: 700;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  text-decoration: none;
+  color: var(--color-bg);
+}
+
 body {
   margin: 0;
   background: var(--color-bg);
@@ -41,6 +75,13 @@ body {
   background-size: 42px 42px;
   background-position: -1px -1px;
   background-attachment: fixed;
+}
+
+/* fixed background attachment is a scroll-jank/paint cost on mobile */
+@media (max-width: 640px) {
+  body {
+    background-attachment: scroll;
+  }
 }
 
 a {

@@ -5,9 +5,17 @@ import { profile } from '../data/cv';
 interface Props {
   title: string;
   description?: string;
+  ogType?: 'website' | 'article';
+  image?: string;
 }
 
-const { title, description = profile.tagline } = Astro.props;
+const {
+  title,
+  description = profile.tagline,
+  ogType = 'website',
+  image = '/og-card.png',
+} = Astro.props;
+const ogImage = new URL(image, Astro.site).href;
 const navItems = [
   { href: '/', label: 'home', key: '1' },
   { href: '/about/', label: 'about', key: '2' },
@@ -22,15 +30,25 @@ const currentPath = Astro.url.pathname;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a1b26" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={profile.name} href="/rss.xml" />
     <meta name="generator" content={Astro.generator} />
     <title>{title} · {profile.name}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(currentPath, Astro.site).href} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={new URL(currentPath, Astro.site).href} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -39,7 +57,9 @@ const currentPath = Astro.url.pathname;
     />
   </head>
   <body>
-    <div id="boot-overlay" class="boot-overlay">
+    <a href="#main" class="skip-link">skip to content</a>
+
+    <div id="boot-overlay" class="boot-overlay" aria-hidden="true" role="presentation">
       <div id="boot-lines" class="boot-lines"></div>
       <p class="boot-skip">press any key or click to skip</p>
     </div>
@@ -70,7 +90,7 @@ const currentPath = Astro.url.pathname;
       </div>
     </header>
 
-    <main>
+    <main id="main">
       <slot />
     </main>
 
@@ -106,19 +126,22 @@ const currentPath = Astro.url.pathname;
       document.addEventListener('keydown', (event) => {
         if (event.ctrlKey || event.metaKey || event.altKey) return;
 
-        const target = event.target as HTMLElement | null;
-        const isTyping =
-          target &&
-          (target.tagName === 'INPUT' ||
-            target.tagName === 'TEXTAREA' ||
-            target.isContentEditable);
-        if (isTyping) return;
-
+        // Escape closes the open mobile menu regardless of where focus sits
         if (event.key === 'Escape' && nav?.classList.contains('open')) {
           nav.classList.remove('open');
           toggle?.setAttribute('aria-expanded', 'false');
+          toggle?.focus();
           return;
         }
+
+        const target = event.target as HTMLElement | null;
+        // don't hijack single keys while focus is on any interactive control
+        // (input, link, button, etc.) — WCAG 2.1.4 Character Key Shortcuts
+        const onInteractive =
+          target &&
+          target !== document.body &&
+          target.closest('a, button, input, textarea, select, [tabindex], [contenteditable]');
+        if (onInteractive) return;
 
         const href = keyMap.get(event.key);
         if (href) window.location.href = href;

@@ -34,7 +34,7 @@ const words = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
 const readingTime = Math.max(1, Math.round(words / 200));
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={post.data.title} description={post.data.description} ogType="article">
   <article class="container page">
     <div class="post-head">
       <span class:list={['badge', PROJECT_CLASS[post.data.project]]}>
@@ -50,6 +50,21 @@ const readingTime = Math.max(1, Math.round(words / 200));
         }
         {' · '}
         {readingTime} min read
+        {
+          post.data.updatedDate && (
+            <>
+              {' · '}
+              <span class="updated">
+                updated{' '}
+                {post.data.updatedDate.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
+            </>
+          )
+        }
       </p>
     </div>
     <h1>{post.data.title}</h1>
@@ -122,6 +137,10 @@ const readingTime = Math.max(1, Math.round(words / 200));
       font-size: 0.82rem;
       color: var(--color-text-muted);
       margin: 0;
+    }
+
+    .updated {
+      color: var(--color-green);
     }
 
     h1 {
