@@ -1,6 +1,6 @@
 export const profile = {
   name: 'Kiran Capoor',
-  role: 'Engineering Leader',
+  role: 'Engineering Leader & hands-on engineer',
   tagline:
     'Engineering leader and hands-on polyglot engineer working across backend, platform, and AI tooling.',
   location: 'Pune, India',
@@ -8,6 +8,11 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/kiran-capoor/',
   github: 'https://github.com/kiran-capoor94',
   youtube: 'https://www.youtube.com/@CtrlAltTechWithKiran',
+  availability: {
+    open: true,
+    short: 'available in ~30 days',
+    long: 'open to engineering leadership & senior IC roles · available in ~30 days',
+  },
   summary: [
     "I'm an engineering leader and hands-on software engineer with 9+ years across backend, platform, AI, and developer tooling. I built and scaled a 66-person cross-functional technology department at a 1,100-person agency, growing department revenue 3x and pushing margins past 60%. These days I'm Tech Lead at Smart Working, contracted to SiSU Health (UK), building AI-native integration infrastructure and distributed systems. I'm a genuine polyglot — TypeScript, Python, Go — and I go wherever the interesting problem is, from architecture through to the thing running in production.",
     "A lot of what I do outside work is tooling for the way I work. I built Wizard, a persistent memory and work triage layer for AI coding agents, because I kept losing context between sessions. I built Wand, a full custom Neovim distribution in Lua, because I wanted an editor that fits exactly how I think. I built Ritual, a one-command dotfiles bootstrap for my dev machine, because setup should be solved once. They're tools I use every day.",

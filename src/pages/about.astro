@@ -45,6 +45,17 @@ const roleCount = experience.length;
           <dt>STATS</dt>
           <dd>{yearsExperience}+ yrs &middot; {roleCount} roles &middot; 1 chemistry degree &middot; 0 regrets (mostly)</dd>
         </div>
+        {
+          profile.availability.open && (
+            <div class="man-row">
+              <dt>STATUS</dt>
+              <dd class="status-dd">
+                <span class="status-dot" aria-hidden="true" />
+                {profile.availability.long}
+              </dd>
+            </div>
+          )
+        }
         <div class="man-row">
           <dt>DESCRIPTION</dt>
           <dd>
@@ -64,7 +75,7 @@ const roleCount = experience.length;
       <div class="git-log">
         {
           experience.map((job, index) => (
-            <details class="commit" open={index === 0}>
+            <details class="commit" open={index < 2}>
               <summary>
                 <span class="graph">&bull;</span>
                 <span class="commit-hash">{pseudoHash(job.role + job.company + job.period)}</span>
@@ -229,6 +240,36 @@ const roleCount = experience.length;
     /* keep the SYNOPSIS command line in mono */
     .man-row dd code {
       font-family: var(--font-mono);
+    }
+
+    .status-dd {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--color-green);
+      font-family: var(--font-mono);
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--color-green);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-green) 60%, transparent);
+      animation: status-pulse 2s ease-out infinite;
+    }
+
+    @keyframes status-pulse {
+      0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-green) 60%, transparent); }
+      70% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--color-green) 0%, transparent); }
+      100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-green) 0%, transparent); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .status-dot {
+        animation: none;
+      }
     }
 
     .man-row dd p {

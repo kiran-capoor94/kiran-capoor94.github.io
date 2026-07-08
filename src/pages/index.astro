@@ -30,6 +30,14 @@ const pitch =
         <p class="output" id="tw-role">{profile.role} &middot; {profile.location}</p>
         <p class="line"><span class="prompt">cat pitch.txt</span></p>
         <p class="output pitch" id="tw-pitch">{pitch}</p>
+        {
+          profile.availability.open && (
+            <p class="availability">
+              <span class="status-dot" aria-hidden="true" />
+              {profile.availability.long}
+            </p>
+          )
+        }
         <div id="term-log" aria-live="polite"></div>
         <p class="line prompt-line">
           <label for="term-input" class="visually-hidden">Terminal command input — type help and press enter</label>
@@ -64,6 +72,7 @@ const pitch =
       role: profile.role,
       location: profile.location,
       pitch,
+      availability: profile.availability.long,
     }}
   >
     (function () {
@@ -118,6 +127,7 @@ const pitch =
         '&nbsp;&nbsp;projects, ls &mdash; open the projects page<br>' +
         '&nbsp;&nbsp;uses &mdash; my daily-driver setup<br>' +
         '&nbsp;&nbsp;blog &mdash; open the blog<br>' +
+        '&nbsp;&nbsp;status &mdash; am I open to work right now?<br>' +
         '&nbsp;&nbsp;contact, mail, hire &mdash; email me<br>' +
         '&nbsp;&nbsp;github, linkedin, youtube &mdash; open my profiles<br>' +
         '&nbsp;&nbsp;fortune &mdash; a random engineering one-liner<br>' +
@@ -178,6 +188,10 @@ const pitch =
             break;
           case 'youtube':
             openExternal(youtube, 'opening youtube...');
+            break;
+          case 'status':
+          case 'availability':
+            appendOutput('&#9679; ' + availability + ". let's talk &mdash; type 'hire'.");
             break;
           case 'fortune':
             appendOutput(FORTUNES[Math.floor(Math.random() * FORTUNES.length)]);
@@ -344,6 +358,37 @@ const pitch =
     .output.pitch {
       max-width: 62ch;
       color: var(--color-text);
+    }
+
+    .availability {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin: 1rem 0 0;
+      font-size: 0.9rem;
+      color: var(--color-green);
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--color-green);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-green) 70%, transparent);
+      animation: status-pulse 2s ease-out infinite;
+    }
+
+    @keyframes status-pulse {
+      0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-green) 60%, transparent); }
+      70% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--color-green) 0%, transparent); }
+      100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-green) 0%, transparent); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .status-dot {
+        animation: none;
+      }
     }
 
     .cursor {

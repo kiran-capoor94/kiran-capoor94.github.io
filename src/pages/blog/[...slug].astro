@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedPosts from '../../components/RelatedPosts.astro';
+import { profile } from '../../data/cv';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -32,10 +33,28 @@ const PROJECT_CLASS: Record<string, string> = {
 
 const words = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
 const readingTime = Math.max(1, Math.round(words / 200));
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+  author: { '@type': 'Person', name: profile.name, url: Astro.site?.href },
+  publisher: { '@type': 'Person', name: profile.name },
+  keywords: post.data.tags.join(', '),
+  url: canonical,
+  mainEntityOfPage: canonical,
+  image: new URL('/og-card.png', Astro.site).href,
+};
 ---
+
 
 <BaseLayout title={post.data.title} description={post.data.description} ogType="article">
   <article class="container page">
+    <script type="application/ld+json" set:html={JSON.stringify(blogSchema)} is:inline />
     <div class="post-head">
       <span class:list={['badge', PROJECT_CLASS[post.data.project]]}>
         {PROJECT_LABEL[post.data.project]}

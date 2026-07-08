@@ -91,6 +91,7 @@ const entries: Entry[] = [
         const li = document.createElement('li');
         li.className = 'cmdk-item' + (i === active ? ' active' : '');
         li.setAttribute('role', 'option');
+        li.id = 'cmdk-opt-' + i;
         li.setAttribute('aria-selected', i === active ? 'true' : 'false');
         li.dataset.index = String(i);
         li.innerHTML =
@@ -107,6 +108,11 @@ const entries: Entry[] = [
         list.appendChild(li);
       });
       empty.hidden = filtered.length > 0;
+      updateActiveDescendant();
+    }
+
+    function updateActiveDescendant() {
+      input.setAttribute('aria-activedescendant', filtered.length ? 'cmdk-opt-' + active : '');
     }
 
     function paintActive() {
@@ -116,6 +122,7 @@ const entries: Entry[] = [
         li.setAttribute('aria-selected', on ? 'true' : 'false');
         if (on) li.scrollIntoView({ block: 'nearest' });
       });
+      updateActiveDescendant();
     }
 
     function filter() {
@@ -164,6 +171,7 @@ const entries: Entry[] = [
       }
       if (root.hidden) return;
       if (ev.key === 'Escape') { ev.preventDefault(); close(); }
+      else if (ev.key === 'Tab') { ev.preventDefault(); } // trap focus: input is the only control, arrows drive the list
       else if (ev.key === 'ArrowDown') { ev.preventDefault(); active = Math.min(filtered.length - 1, active + 1); paintActive(); }
       else if (ev.key === 'ArrowUp') { ev.preventDefault(); active = Math.max(0, active - 1); paintActive(); }
       else if (ev.key === 'Enter') { ev.preventDefault(); go(active); }
