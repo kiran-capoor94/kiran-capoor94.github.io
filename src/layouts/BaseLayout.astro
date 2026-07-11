@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { profile } from '../data/cv';
 import CommandPalette from '../components/CommandPalette.astro';
+import LivingGrid from '../components/LivingGrid.astro';
 
 interface Props {
   title: string;
@@ -73,6 +74,7 @@ const personSchema = {
     <script type="application/ld+json" set:html={JSON.stringify(personSchema)} is:inline />
   </head>
   <body>
+    <LivingGrid />
     <a href="#main" class="skip-link">skip to content</a>
 
     <div id="boot-overlay" class="boot-overlay" aria-hidden="true" role="presentation">

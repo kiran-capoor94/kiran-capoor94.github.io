@@ -1,0 +1,121 @@
+---
+// Conway's Life on the site's background grid. Decorative; see
+// docs/superpowers/specs/2026-07-11-living-grid-design.md
+---
+
+<canvas id="living-grid" aria-hidden="true"></canvas>
+
+<script>
+  import { createGrid, seedRandom, step, population } from '../lib/life.mjs';
+
+  const CELL = 42; // matches the CSS background grid
+  const ORIGIN = -1; // matches background-position: -1px -1px
+  const GEN_MS = 1000; // ~1 generation / second
+  const SEED_DENSITY = 0.1;
+  const CELL_STYLE = 'rgba(158, 206, 106, 0.1)'; // --color-green, low alpha
+
+  const el = document.getElementById('living-grid');
+  const ctx = el instanceof HTMLCanvasElement ? el.getContext('2d') : null;
+
+  if (el instanceof HTMLCanvasElement && ctx) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let cols = 1;
+    let rows = 1;
+    let grid = createGrid(cols, rows);
+    let lastGen = 0;
+    let prevPop = 0;
+    let stagnant = 0;
+    let rafId: number | null = null;
+    let running = false;
+
+    function debounce(fn: () => void, ms: number): () => void {
+      let id: number | undefined;
+      return () => {
+        if (id !== undefined) clearTimeout(id);
+        id = window.setTimeout(() => fn(), ms);
+      };
+    }
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      (el as HTMLCanvasElement).width = Math.floor(w * dpr);
+      (el as HTMLCanvasElement).height = Math.floor(h * dpr);
+      (el as HTMLCanvasElement).style.width = w + 'px';
+      (el as HTMLCanvasElement).style.height = h + 'px';
+      (ctx as CanvasRenderingContext2D).setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.ceil(w / CELL) + 1;
+      rows = Math.ceil(h / CELL) + 1;
+      grid = createGrid(cols, rows);
+      seedRandom(grid, SEED_DENSITY);
+      prevPop = population(grid);
+      stagnant = 0;
+      draw();
+    }
+
+    function draw() {
+      (ctx as CanvasRenderingContext2D).clearRect(0, 0, (el as HTMLCanvasElement).width, (el as HTMLCanvasElement).height);
+      (ctx as CanvasRenderingContext2D).fillStyle = CELL_STYLE;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          if (grid.cells[row * cols + col]) {
+            (ctx as CanvasRenderingContext2D).fillRect(ORIGIN + col * CELL + 1, ORIGIN + row * CELL + 1, CELL - 2, CELL - 2);
+          }
+        }
+      }
+    }
+
+    function generation() {
+      grid = step(grid);
+      const pop = population(grid);
+      if (pop < cols * rows * 0.02 || pop === prevPop) stagnant++;
+      else stagnant = 0;
+      if (pop === 0 || stagnant > 8) {
+        seedRandom(grid, SEED_DENSITY);
+        stagnant = 0;
+      }
+      prevPop = pop;
+      draw();
+    }
+
+    function loop(t: number) {
+      if (!running) return;
+      if (t - lastGen >= GEN_MS) {
+        lastGen = t;
+        generation();
+      }
+      rafId = requestAnimationFrame(loop);
+    }
+
+    function start() {
+      if (running || reduceMotion) return;
+      running = true;
+      lastGen = performance.now();
+      rafId = requestAnimationFrame(loop);
+    }
+
+    function stop() {
+      running = false;
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    }
+
+    window.addEventListener('resize', debounce(resize, 150));
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else start();
+    });
+
+    resize(); // seeds + draws one frame (this is the whole show under reduced-motion)
+    start(); // no-op when reduce-motion is on
+  }
+</script>
+
+<style>
+  #living-grid {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+</style>
