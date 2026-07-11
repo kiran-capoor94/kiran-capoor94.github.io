@@ -6,7 +6,7 @@
 <canvas id="living-grid" aria-hidden="true"></canvas>
 
 <script>
-  import { createGrid, seedRandom, step, population } from '../lib/life.mjs';
+  import { createGrid, seedRandom, step, population, bloom, insertGlider } from '../lib/life.mjs';
 
   const CELL = 42; // matches the CSS background grid
   const ORIGIN = -1; // matches background-position: -1px -1px
@@ -105,6 +105,33 @@
       if (document.hidden) stop();
       else start();
     });
+
+    // interactivity: fine pointers (desktop) only, and only when motion is allowed
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    if (finePointer && !reduceMotion) {
+      const cellAt = (clientX: number, clientY: number) => ({
+        col: Math.floor((clientX - ORIGIN) / CELL),
+        row: Math.floor((clientY - ORIGIN) / CELL),
+      });
+      let lastMove = 0;
+      window.addEventListener(
+        'mousemove',
+        (e) => {
+          const now = performance.now();
+          if (now - lastMove < 60) return;
+          lastMove = now;
+          const { col, row } = cellAt(e.clientX, e.clientY);
+          bloom(grid, col, row, 1);
+          draw();
+        },
+        { passive: true }
+      );
+      window.addEventListener('click', (e) => {
+        const { col, row } = cellAt(e.clientX, e.clientY);
+        insertGlider(grid, col, row);
+        draw();
+      });
+    }
 
     resize(); // seeds + draws one frame (this is the whole show under reduced-motion)
     start(); // no-op when reduce-motion is on
