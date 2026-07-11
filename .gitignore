@@ -17,3 +17,6 @@ npm-debug.log*
 
 # personal source documents, not needed for the built site
 Kiran_Capoor_CV.docx
+
+# subagent-driven-dev scratch
+.superpowers/
