@@ -232,6 +232,8 @@ export interface Project {
   tagline: string;
   why: string;
   impact?: string;
+  status?: string;
+  visibility?: 'public' | 'private' | 'internal';
   stack: string[];
   link?: string;
   cast?: string; // path to an asciinema recording in /public/casts, e.g. '/casts/wand.cast'
@@ -239,25 +241,40 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    name: 'Forge',
-    tagline: 'An internal ops platform that replaced four spreadsheets and a group chat.',
-    why: 'A 3D-printing business needed order management, cost calculation, inventory tracking, and production workflows in one place instead of duct-taped spreadsheets — so I scoped, built, and shipped the whole thing.',
-    impact: 'centralizes order management, cost calculation, inventory tracking, and production workflows into a single internal tool',
-    stack: ['TypeScript', 'PostgreSQL', 'event-driven architecture'],
+    name: 'Wizard',
+    tagline: 'Persistent memory, skills, modes, and work triage for AI coding agents.',
+    why: "Agents kept losing the thread between sessions. Wizard became the local-first memory layer I wanted: session hooks, 20 MCP tools, 17 agent skills, working modes, PII scrubbing, FTS5 search, analytics, and optional Notion/Obsidian write-back.",
+    impact: 'v2.2.37, 20 MCP tools, 17 skills, 5 read-only resources, session hooks, Streamlit dashboard, SQLite/FTS5 backend',
+    status: 'usable / actively versioned',
+    visibility: 'public',
+    stack: ['Python 3.13+', 'FastMCP', 'SQLite', 'FTS5', 'SQLModel', 'LiteLLM', 'Typer'],
+    link: 'https://github.com/kiran-capoor94/wizard',
   },
   {
-    name: 'Wizard',
-    tagline: 'Long-term memory for AI coding agents that keep forgetting everything.',
-    why: "Every new agent session started from zero — same context, re-explained, every single time. I got tired of being the agent's memory, so I built it one instead.",
-    impact: '~40% smaller transcripts than raw JSON, via a custom compact format (TOON)',
-    stack: ['Python 3.12', 'FastMCP', 'SQLite', 'LiteLLM'],
-    link: 'https://github.com/kiran-capoor94/wizard',
+    name: 'Alchemist',
+    tagline: 'A local-first Rust agentic coding CLI built around harness strength, not model faith.',
+    why: 'Local models are weaker at tool-calling than hosted frontier models. Alchemist compensates with a bounded shared executor, jailed native tools, deterministic TOML workflows, MCP server mounting, confirmation policies, and strict crate boundaries.',
+    impact: 'single execution core for free-form agent loops and deterministic workflows; no unsafe/unwrap/expect/panic/todo/dbg in non-test code by workspace lint',
+    status: 'private / in active build',
+    visibility: 'private',
+    stack: ['Rust', 'LM Studio', 'MCP', 'TOML workflows', 'Reedline', 'Tokio', 'Clippy'],
+  },
+  {
+    name: 'Forge',
+    tagline: 'An internal ops platform that replaced four spreadsheets and a group chat.',
+    why: 'A 3D-printing business needed order management, cost calculation, inventory tracking, slicing, CRM sync, and pricing workflows in one place instead of duct-taped spreadsheets, so I scoped and built the operating system around it.',
+    impact: 'cost calculator, catalogue, orders, inventory, print jobs, AI quote assistant, MCP server, Rust slicer-preset CLI',
+    status: 'usable internal platform',
+    visibility: 'private',
+    stack: ['Next.js', 'Hono', 'PostgreSQL', 'Supabase', 'Rust', 'MCP', 'Docker'],
   },
   {
     name: 'Wand.nvim',
     tagline: 'A Neovim distribution built for one very specific user: me.',
     why: "Off-the-shelf configs always fought me on something. Easier to write 5,000 lines of Lua than compromise on my workflow.",
     impact: 'sub-100ms cold boot, full LSP/DAP/test stack included',
+    status: 'usable daily driver',
+    visibility: 'public',
     stack: ['Lua', 'Neovim', 'Mason', 'Telescope', 'DAP'],
     link: 'https://github.com/buildWithAlchemist/wand',
   },
@@ -266,28 +283,38 @@ export const projects: Project[] = [
     tagline: "Dotfiles that set up a brand-new machine before your coffee's ready.",
     why: 'Rebuilding a dev machine from scratch used to eat a weekend. Now it eats one `curl` command.',
     impact: 'one-command bootstrap, drift-detected, per-machine templating via Go templates',
+    status: 'usable daily setup',
+    visibility: 'public',
     stack: ['Chezmoi', 'Go templates', 'Fish', 'Tailscale'],
     link: 'https://github.com/kiran-capoor94/ritual',
   },
   {
+    name: 'CtrlAlchemy',
+    tagline: 'A YouTube automation platform where every content action is a tracked task.',
+    why: 'Content workflows get messy once transcripts, ideation, generation, analytics, moderation, and publishing all become separate moving parts. CtrlAlchemy treats the whole thing as observable tasks with specialized agents, evals, tracing, and local/prod model routing.',
+    impact: '15+ specialized agents, task-first architecture, OpenTelemetry/Prometheus observability, A2A signing, Vertex AI + Ollama model paths',
+    status: 'usable platform skeleton',
+    visibility: 'public',
+    stack: ['Go', 'Flutter', 'PostgreSQL', 'Ollama', 'Vertex AI', 'OpenTelemetry', 'Terraform'],
+    link: 'https://github.com/buildWithAlchemist/ctrl_alchemy',
+  },
+  {
     name: 'RAG Agentic Code Analysis',
     tagline: 'Ask a codebase questions instead of grepping it for an hour.',
-    why: 'Wanted to know if multi-agent RAG actually holds up on real code, not toy examples — so I pointed it at real repos and made it show its work.',
-    impact: 'tracks latency, token cost, and confidence per query — no black-box answers',
+    why: 'Wanted to know if multi-agent RAG actually holds up on real code, not toy examples, so I pointed it at real repos and made it show its work.',
+    impact: 'tracks latency, token cost, and confidence per query, no black-box answers',
+    status: 'prototype / learning artifact',
+    visibility: 'public',
     stack: ['LangChain', 'ChromaDB', 'AST parsing', 'Streamlit'],
     link: 'https://github.com/kiran-capoor94/sws_rag',
   },
   {
-    name: 'Texmail',
-    tagline: 'A Django billing app that predates my terminal obsession.',
-    why: 'Built during the Texmith years, when "ship it" mattered more than "make it pretty." Still runs.',
-    stack: ['Django', 'Celery', 'Docker', 'Heroku'],
-  },
-  {
     name: 'Ctrl Alt Tech',
     tagline: 'A YouTube channel for the engineering layer nobody puts in the demo.',
-    why: 'The interesting part of senior engineering rarely makes it into tutorials — the tradeoffs, the dead ends, the "why we didn\'t do it that way." So I started filming that part instead.',
+    why: 'The interesting part of senior engineering rarely makes it into tutorials: the tradeoffs, the dead ends, the "why we didn\'t do it that way." So I started filming that part instead.',
     impact: '355 subscribers, 40K+ views',
+    status: 'active publishing channel',
+    visibility: 'public',
     stack: ['YouTube', 'Godot', 'GDScript'],
     link: 'https://www.youtube.com/@CtrlAltTechWithKiran',
   },
